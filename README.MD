@@ -5,8 +5,9 @@
 
 In your terminal window type:
 
-```git clone ***
-cd p5-template
+```
+git clone git@github.com:neontribe/untangled-template.git
+cd untangled-template
 npm install
 npm run dev
 ```
