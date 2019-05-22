@@ -28,3 +28,22 @@ You can find libraries that work with p5.js [here](https://p5js.org/libraries/)
 Of course you can install any other library you like like [Tone.js](https://tonejs.github.io/) or [Matter](http://brm.io/matter-js/)
 
 You can do this either by importing the library files directly into your project or by installing via [NPM](https://www.npmjs.com/)
+
+### Working with audio
+
+If you are using audio, you might get a message in your dev tools console (f12) that looks something like this:
+
+```
+Context.js:15 The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://goo.gl/7K7WLu
+```
+A simple way around this is to install [unmute](https://www.npmjs.com/package/unmute) using
+```
+npm install unmute
+```
+
+Add a mute button to your sketch by including the following lines of code at the top of your sketch js file:
+```
+import UnmuteButton from 'unmute'
+
+UnmuteButton()
+````
