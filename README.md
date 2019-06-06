@@ -1,31 +1,6 @@
-## P5 First Project Step by Step guide
----
+## Untangled P5 Template Project
 
-Here are some steps to help you build a simple p5 sketch like the one on the front page of <https://www.untangled.org.uk>
-
-They don't tell you exactly how to do it, but they help you break down a complex task into acheivable steps. Practice your `git skills` by doing a `git commit` after each step. 
-
-### The Steps
-
-1. set up git account?
-1. git clone this repo
-1. open project in your code editor
-1. run the project in your browser (instructions below) - you should see a white rectangle on a black background
-1. add a white circle
-1. change the background to white and the shapes to black
-1. change the shapes to be coloured randomly when the page loads
-1. make the circle move in a straight line
-1. make the rectangle move in a diagonal line
-1. make both shapes bounce off the edges of the screen
-1. make both shapes move randomly around the screen
-1. remove the rectangle
-1. render 5 of circles with the same behaviour as the first
-1. render a random number of circles
-1. make the circles attract each other
-1. turn the circles in to hexagons
-1. make the hexagons make a sound when they bounce off the screen edges
-1. make the the big hexagons make a low pitched sound and smaller ones make a high pitched sound
-1. make the hexagons repel each other after while
+For the Untangled 'step by step task' guide please go [here](https://github.com/neontribe/untangled-template/wiki/Untangled-Step-by-Step-task)
 
 ### To run the Project
 
