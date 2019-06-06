@@ -18,7 +18,7 @@ The last command will start [browser-sync](https://browsersync.io/) which will a
  ---------------------------------------
        Local: http://localhost:3000
 ```
-Your browser should open your sketch in a new tab automatically. If for any reason the window closes, copy and paste this address into your broswer and you should see your sketch.
+Your browser should open your sketch in a new tab automatically. If for any reason the window closes, copy and paste this address into your browser and you should see your sketch.
 
 If a window opens, but you don't see your sketch, hit f12 or right-click and select 'inspect' in your browser window and look for error messages in your console.
 
