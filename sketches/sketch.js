@@ -27,14 +27,32 @@ const testData = {
 }
 
 
-function makeNoteValues(company, index) {
-  var volume = Object.values(testData)[company].volume[index]
-  var sharePrice = Object.values(testData)[company].sharePrice[index]
+const dummyArray = [60, 0.8];
 
-  var currentValues = [volume, sharePrice]
+class Company {
+  constructor() {
+    var synth = new Tone.Synth().toMaster();
+  }
 
-  return currentValues
+  makeNoteValues(company, index) {
+    var volume = Object.values(testData)[company].volume[index]
+    var sharePrice = Object.values(testData)[company].sharePrice[index]
+
+    var currentValues = [volume, sharePrice]
+
+    return currentValues
+  }
+
+  playNote() {
+    synth.volume.value = 6;
+    synth.triggerAttackRelease(Tone.Frequency(60, "midi").toNote(), "8n");
+  }
 }
+
+
+
+
+
 
 
 
@@ -46,7 +64,7 @@ function setup() {
   // create a canvas
   createCanvas(600, 800);
 
- console.log(makeNoteValues(1, 0))
+  console.log(makeNoteValues(1, 0))
 }
 
 function draw() {
