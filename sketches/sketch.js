@@ -62,7 +62,6 @@ for (var i = 0; i < Object.keys(testData).length - 2; i++) {
   companies.push(new Company(Object.keys(testData)[i]));
 }
 
-
 maxBeats = testData[Object.keys(testData)[0]].sharePrice.length;
 
 var mainLoop = new Tone.Clock(function() {
