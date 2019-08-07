@@ -2041,6 +2041,9 @@ let testData = {
   ]
 };
 
+// Due to the way that memory is managed in JS, the code below makes sure that a new memory area is allocated to store an indirect copy of `testData`.
+testDataDisplay = JSON.parse(JSON.stringify(testData));
+
 function normalise(data) {
   Object.keys(data)
     .filter(function (companyName) {
@@ -2314,6 +2317,8 @@ async function start() {
 
   var mainLoop = new Tone.Clock(function () {
     for (var i = 0; i < companies.length; i++) {
+      updateGraph(companies[i].getUniformTimeline(beat).current[0], i, companies[i].companyName, beat);
+
       companies[i].playSequence(beat, currentSequence);
 
       if (beat % PATTERN_CHANGE_INTERVAL == 0) {
@@ -2334,21 +2339,5 @@ async function start() {
 
   mainLoop.start();
 }
-
-// function setup() {
-//   // create a canvas
-//   createCanvas(600, 800);
-
-//   console.log(makeNoteValues(1, 0))
-// }
-
-// function draw() {
-//   // colour the background black
-//   background(0);
-//   // select white as a colour
-//   fill(255);
-//   // draw a rectangle
-//   rect(150, 150, 100, 100);
-// }
 
 start();
