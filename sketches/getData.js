@@ -25,17 +25,32 @@ async function getExchangeRate(from, to) {
   return dataValuesArray;
 }
 
+// {
+//     microsoft: {
+//         volume: [],
+//         sharePrice: [],
+//         fromDate: '2019-08-06'
+//         toDate: '2019-08-10'
+//     }
+// }
+
 async function getStonks(symbol) {
   const requestURL = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&apikey=${API_KEY}`;
 
   const response = await fetch(requestURL);
   const data = await response.json();
 
-  const sortedEntries = Object.entries(data["Monthly Time Series"]).sort(
-    function(a, b) {
-      return new Date(a[0]) - new Date(b[0]);
-    }
-  );
+  if (data.hasOwnProperty("Note")) {
+    throw new Error("API limit reached");
+  }
+
+  let monthlyData = data["Monthly Time Series"];
+
+  let dates = Object.keys(monthlyData);
+
+  const sortedEntries = Object.entries(monthlyData).sort(function(a, b) {
+    return new Date(a[0]) - new Date(b[0]);
+  });
 
   const sharePriceArray = sortedEntries.map(function(item) {
     return parseFloat(item[1]["4. close"]);
@@ -47,7 +62,9 @@ async function getStonks(symbol) {
 
   return {
     volume: volumeArray,
-    sharePrice: sharePriceArray
+    sharePrice: sharePriceArray,
+    fromData: dates[dates.length - 1],
+    toData: dates[0]
   };
 }
 
