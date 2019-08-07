@@ -1971,36 +1971,210 @@ const normalise = function(data) {
     });
 };
 
-const dummyArray = [60, 0.8];
+const SCALES = {
+  major: [36, 38, 40, 41, 43, 45, 47, 48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83],
+  minor: [36, 38, 39, 41, 43, 44, 46, 48, 50, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67, 68, 70, 72, 74, 75, 77, 79, 80, 82]
+};
+
+const SEQUENCES = [
+  ["current"],
+  ["current", "current"],
+  ["previous", null],
+  ["current", "nextNext"],
+  ["current", "current", "current", "current"],
+  ["current", "current", "previousPrevious", "current"],
+  ["current", "current", null, "current"],
+  [null, "current", null, "current"],
+  ["current", null, "current", null],
+  ["next", null, "current", null],
+  ["current", "next", "current", "next"],
+  ["current", "next", "previousPrevious", "current"],
+  ["nextNext", "current", "current", "previousPrevious"],
+  ["current", ["next", null, "nextNext", "next"], "current", null],
+  ["current", "next", "current", "previous", "current", "next", "current", "next"],
+  ["current", ["next", null, "next", "current"], "current", ["current", "next"], "current"],
+  [["current", null, "next", "current"], "current", "next", "current", ["current", "previous"]],
+  [["next", "current", null, "current"],["current", null, null, "nextNext"], "current", "next"],
+  ["current", [null, "previousPrevious", null, "previous"], "current", [null, "current"], "current"],
+  [["current", "next", null, "current"], [null, "current"], ["current", null, "current", null], "next", "current"],
+  [["current", "next", null, "next"], ["next", "current", null, "current"], ["next", "next", null, "current"], "current"],
+  [["nextNext", "next", "current", "next"], ["current", null, "current", null], ["previous", "current", "previous", "current"], null, ["nextNext", "current"]],
+];
+
+const KEEP_TREND_HISTORY = 2;
+
+function decimalToDecibels(decimal) {
+  var decibels = 0;
+
+  if (decimal != 0) {
+    decibels = 20 * Math.log10(decimal);
+  } else {
+    decibels = -Infinity;
+  }
+
+  return decibels;
+}
 
 class Company {
   constructor(name) {
     this.companyName = name;
     this.synth = new Tone.Synth().toMaster();
     this.currentValues = [];
+    this.mode = "major";
+    this.sequence = null;
   }
 
-  makeNoteValues(index) {
-    // FIX THIS, this.currentValues is not being set
+  getNoteFromScale(index) {
+    return SCALES[this.mode][index];
+  }
+
+  makeNoteValues(index, keepTrendHistory = 2) {
     var volume = testData[this.companyName].volume[index];
-    var sharePrice = testData[this.companyName].sharePrice[index];
+    var sharePrice = 0;
 
     // this.currentValues = [Math.round(volume), Math.round(sharePrice)];
     this.currentValues = [volume, "8n"];
   }
 
   playNote() {
-    //this.synth.volume.value = this.currentValues[0];
-    // var note = Tone.Frequency(this.currentValues[1], "midi").toNote();
-    // console.log(`note is ${note}`);
-    // var velocity = mapRange(this.currentValues[0], 0, 100, 0, 1);
-    // console.log(velocity);
-    // this.synth.triggerAttackRelease("C4", "16n", undefined, 1);
+    sharePrice = SCALES[this.mode][testData[this.companyName].sharePrice[index]];
+    this.currentValues = [sharePrice, volume];
+
+    if (this.getMajorMinor(index, keepTrendHistory) != "none") {
+      this.mode = this.getMajorMinor(index, keepTrendHistory);
+    }
   }
 
-  makeAndPlay(beat) {
-    this.makeNoteValues(beat);
+  getPreviousNotes(index, amount) {
+    var previousNotes = [];
+
+    for (var i = 1; i <= amount; i++) {
+      if (index - i < 0) {
+        previousNotes.push([0, -Infinity]);
+      } else {
+        previousNotes.push([testData[this.companyName].sharePrice[index - i], testData[this.companyName].volume[index - i]])
+      }
+    }
+
+    return previousNotes;
+  }
+
+  getNextNotes(index, amount) {
+    var nextNotes = [];
+
+    for (var i = 1; i <= amount; i++) {
+      if (index + i > testData[this.companyName].sharePrice.length) {
+        nextNotes.push([0, -Infinity]);
+      } else {
+        nextNotes.push([testData[this.companyName].sharePrice[index + i], testData[this.companyName].volume[index + i]])
+      }
+    }
+
+    return nextNotes;
+  }
+
+  getDirectionality(index, amount) {
+    var previousNotes = this.getPreviousNotes(index, amount);
+    var lastNote = -Infinity;
+    var change = 0;
+
+    for (var i = 0; i < amount; i++) {
+      if (previousNotes[i] < lastNote) {
+        change--;
+      } else if (previousNotes[i] > lastNote) {
+        change++;
+      }
+
+      lastNote = previousNotes[i];
+    }
+
+    return change;
+  }
+
+  getMajorMinor(index, amount) {
+    var change = this.getDirectionality(index, amount);
+
+    if (change == 0) {
+      return "none";
+    } else if (change < 0) {
+      return "minor";
+    } else if (change > 0) {
+      return "major";
+    }
+  }
+
+  getUniformTimeline(index) {
+    var previousNotes = this.getPreviousNotes(index, 2);
+    var nextNotes = this.getNextNotes(index, 2);
+    var currentNote = [testData[this.companyName].sharePrice[index], testData[this.companyName].volume[index]];
+
+    return {
+      previousPrevious: previousNotes[0],
+      previous: previousNotes[1],
+      current: currentNote,
+      next: nextNotes[0],
+      nextNext: nextNotes[1],
+      mode: this.getMajorMinor(index, 2)
+    };
+  }
+
+  playNote() {
+    this.synth.volume.value = decimalToDecibels(this.currentValues[1]);
+    this.synth.triggerAttackRelease(Tone.Frequency(this.currentValues[0], "midi").toNote(), "8n");
+  }
+
+  sequenceFactory(callback, timeline, sequence, time, index) {
+    var formattedSequenceBar = [];
+
+    function iterateSequence(array) {
+      var newArray = [];
+      
+      for (var i = 0; i < array.length; i++) {
+        var data = array[i];
+
+        if (typeof(data) == "string") { // Reference to note
+          newArray.push(timeline[data][0]);
+        } else if (typeof(data) == "object") { // Subdivision
+          newArray.push(iterateSequence(data));
+        }
+      }
+
+      return newArray;
+    }
+
+    formattedSequenceBar = iterateSequence(sequence);
+
+    return new Tone.Sequence(callback, formattedSequenceBar, time);
+  }
+
+  playSequence(index, sequence = ["current", ["next", "next"], "current", "next"], time = "8n") {
+    var thisScope = this;
+
+    if (this.sequence != null) {
+      this.sequence.dispose();
+    }
+
+    this.synth.volume.value = testData[this.companyName].volume[index];
+
+    this.sequence = this.sequenceFactory(function(time, note) {
+      if (typeof(note) == "number") {
+        thisScope.synth.triggerAttackRelease(Tone.Frequency(thisScope.getNoteFromScale(note), "midi").toNote(), "8n");
+      }
+    }, this.getUniformTimeline(index), sequence, time);
+
+    this.sequence.start();
+  }
+
+  makeAndPlay(beat, keepTrendHistory = 2) {
+    this.makeNoteValues(beat, keepTrendHistory);
     this.playNote();
+  }
+
+  getActivityAmount(index, amount) {
+    var start = this.getPreviousNotes(index, amount)[0][0];
+    var end = testData[this.companyName].sharePrice[index];
+
+    return Math.abs(end - start);
   }
 }
 
@@ -2012,22 +2186,29 @@ async function start() {
   console.log(testData);
 
   var beat = 0;
-  // var maxBeats = 0;
+  var maxBeats = 0;
 
   const companies = companyKeys.map(function(companyKey) {
     return new Company(companyKey);
   });
-
-  // console.log(companies);
-
-  // maxBeats = testData[Object.keys(testData)[0]].sharePrice.length;
+  
+Tone.Transport.start();
 
   var mainLoop = new Tone.Clock(function() {
     for (var i = 0; i < companies.length; i++) {
-      companies[i].makeAndPlay(beat);
+      companies[i].playSequence(beat);
     }
 
     beat++;
+
+  if (beat >= maxBeats) {
+    for (var i = 0; i < companies.length; i++) {
+      companies[i].sequence.stop();
+    }
+
+    mainLoop.stop();
+  } 
+}, 1);
 
     // if (beat >= maxBeats) {
     //   mainLoop.stop();
