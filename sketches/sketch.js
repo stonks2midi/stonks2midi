@@ -49,6 +49,20 @@ class Company {
     return previousNotes;
   }
 
+  getNextNotes(index, amount) {
+    var nextNotes = [];
+
+    for (var i = 0; i < amount; i++) {
+      if (index + i + 1 > testData[this.companyName].sharePrice.length) {
+        nextNotes.push([0, -Infinity]);
+      } else {
+        nextNotes.push([testData[this.companyName].sharePrice[index + i], testData[this.companyName].volume[index + i]])
+      }
+    }
+
+    return nextNotes;
+  }
+
   getDirectionality(index, amount) {
     var previousNotes = this.getPreviousNotes(index, amount);
     var lastNote = -Infinity;
@@ -79,6 +93,21 @@ class Company {
     }
   }
 
+  getUniformTimeline(index) {
+    var previousNotes = this.getPreviousNotes(index, 2);
+    var nextNotes = this.getNextNotes(index, 2);
+    var currentNote = [testData[this.companyName].sharePrice[index - i], testData[this.companyName].volume[index - i]];
+
+    return {
+      previousPrevious: previousNotes[0],
+      previous: previousNotes[1],
+      current: currentNote,
+      next: nextNotes[0],
+      nextNext: nextNotes[1],
+      mode: this.getMajorMinor(index, 2)
+    };
+  }
+
   playNote() {
     this.synth.volume.value = this.currentValues[1];
     this.synth.triggerAttackRelease(Tone.Frequency(this.currentValues[0], "midi").toNote(), "8n");
@@ -103,12 +132,11 @@ maxBeats = testData[Object.keys(testData)[0]].sharePrice.length;
 var mainLoop = new Tone.Clock(function() {
   for (var i = 0; i < companies.length; i++) {
     companies[i].makeAndPlay(beat);
-    console.log(
-      companies[i].companyName,
-      companies[i].getPreviousNotes(beat, 3),
-      companies[i].getDirectionality(beat, 3),
-      companies[i].getMajorMinor(beat, 3)
-    );
+
+    // console.log(
+    //   companies[i].companyName,
+    //   companies[i].getUniformTimeline(beat)
+    // );
   }
 
   beat++;
