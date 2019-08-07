@@ -2210,11 +2210,6 @@ Tone.Transport.start();
   } 
 }, 1);
 
-    // if (beat >= maxBeats) {
-    //   mainLoop.stop();
-    // }
-  }, 4);
-
   mainLoop.start();
 }
 
