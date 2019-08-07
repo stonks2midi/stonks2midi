@@ -33,8 +33,30 @@ sequence bank {
         "basic": [current, current, current, current],
         "odd": [current, null, current, null],
         "alternate": [current, next, current, next],
-        "complex1": [current, [next, current, next, current], current, [current, next], current],
-        
-    }
+        "complex1": [current, [next, null, next, current], current, [current, next], current],
+        "basic2": [current, current, null, current],
+        "simple": [null, current, null, current],
+        "basic3": [current, next, previousprevious, current],
+        "minim2": [previous, null,],
+        "alternate2": [current, [next, null, nextnext, next], current, null],
+        "stonks": [[next, current, null, current],[current, null, null, nextnext], current, next],
+        "midistonks": [nextnext, current, current, previousprevious],
+        "stonks2": [current, nextnext],
+        "complex2": [current, [null, previousprevious, null, previous], current, [null,current], current],
+        "stonks2midi": [current, next, current, previous, current, next, current, next],
+        "midi": [[nextnext, next, current, next], [current, null, current, null], [previous, current, previous, current], null, [nextnext, current]],
+        "midi2": [next, null, current, null],
+        "stonksm": [[current, null, next, currrent], current, next, current, [current, previous]],
+        "graph" : [current, current, null, current], 
+        "stonkslimited": [[current, next, null, current], [null, current], [current, null, current, null], next, current],
+        "basic4": [current, current, previousprevious, current,],
+        "midi3": [[current, next, null, next], [next, current, null, current], [next, next, null, current], current],
+
+
+
+    
+    
+        }
+
 // set the synth to the desired volume
 // sequence plays the sequence
