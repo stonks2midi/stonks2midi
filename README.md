@@ -9,7 +9,11 @@ npm install
 npm run dev
 ```
 
-## Inspirational quote
+## Inspirational quotes 
 > I have now idea how the stock market works.
 >
 > _-James_
+
+>It sounds like actual music!
+>
+> _-Josh_
