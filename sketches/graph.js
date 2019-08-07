@@ -28,7 +28,7 @@ var systemFont;
 function getMean(array) {
     return array.reduce(function(previous, current) {
         return previous + current;
-    }, 0);
+    }, 0) / array.length;
 }
 
 function preload() {
@@ -105,6 +105,10 @@ function draw() {
     fill(...READOUT_COLOUR);
     textSize(50);
     text("£" + parseFloat(Math.round(getMean(displaySharePrice) * 100) / 100).toFixed(2), 20, 80);
+}
+
+function windowResized() {
+    resizeCanvas(window.innerWidth, window.innerHeight);
 }
 
 function updateGraph(height, legend, name, index) {
