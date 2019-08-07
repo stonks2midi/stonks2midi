@@ -57,5 +57,6 @@ sequence bank {
     
     
         }
+
 // set the synth to the desired volume
 // sequence plays the sequence
