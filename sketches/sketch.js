@@ -44,6 +44,11 @@ class Company {
     this.synth = new Tone.Synth().toMaster();
     this.currentValues = [];
     this.mode = "major";
+    this.sequence = null;
+  }
+
+  getNoteFromScale(index) {
+    return SCALES[this.mode][index];
   }
 
   makeNoteValues(index, keepTrendHistory = 2) {
@@ -75,8 +80,8 @@ class Company {
   getNextNotes(index, amount) {
     var nextNotes = [];
 
-    for (var i = 0; i < amount; i++) {
-      if (index + i + 1 > testData[this.companyName].sharePrice.length) {
+    for (var i = 1; i <= amount; i++) {
+      if (index + i > testData[this.companyName].sharePrice.length) {
         nextNotes.push([0, -Infinity]);
       } else {
         nextNotes.push([testData[this.companyName].sharePrice[index + i], testData[this.companyName].volume[index + i]])
@@ -108,18 +113,18 @@ class Company {
     var change = this.getDirectionality(index, amount);
 
     if (change == 0) {
-      return "none"
+      return "none";
     } else if (change < 0) {
-      return "minor"
+      return "minor";
     } else if (change > 0) {
-      return "major"
+      return "major";
     }
   }
 
   getUniformTimeline(index) {
     var previousNotes = this.getPreviousNotes(index, 2);
     var nextNotes = this.getNextNotes(index, 2);
-    var currentNote = [testData[this.companyName].sharePrice[index - i], testData[this.companyName].volume[index - i]];
+    var currentNote = [testData[this.companyName].sharePrice[index], testData[this.companyName].volume[index]];
 
     return {
       previousPrevious: previousNotes[0],
@@ -134,6 +139,48 @@ class Company {
   playNote() {
     this.synth.volume.value = decimalToDecibels(this.currentValues[1]);
     this.synth.triggerAttackRelease(Tone.Frequency(this.currentValues[0], "midi").toNote(), "8n");
+  }
+
+  sequenceFactory(callback, timeline, sequence, time, index) {
+    var formattedSequenceBar = [];
+
+    function iterateSequence(array) {
+      var newArray = [];
+      
+      for (var i = 0; i < array.length; i++) {
+        var data = array[i];
+
+        if (typeof(data) == "string") { // Reference to note
+          newArray.push(timeline[data][0]);
+        } else if (typeof(data) == "object") { // Subdivision
+          newArray.push(iterateSequence(data));
+        }
+      }
+
+      return newArray;
+    }
+
+    formattedSequenceBar = iterateSequence(sequence);
+
+    return new Tone.Sequence(callback, formattedSequenceBar, time);
+  }
+
+  playSequence(index, sequence = ["current", ["next", "next"], "current", "next"], time = "8n") {
+    var thisScope = this;
+
+    if (this.sequence != null) {
+      this.sequence.dispose();
+    }
+
+    this.synth.volume.value = testData[this.companyName].volume[index];
+
+    this.sequence = this.sequenceFactory(function(time, note) {
+      if (typeof(note) == "number") {
+        thisScope.synth.triggerAttackRelease(Tone.Frequency(thisScope.getNoteFromScale(note), "midi").toNote(), "8n");
+      }
+    }, this.getUniformTimeline(index), sequence, time);
+
+    this.sequence.start();
   }
 
   makeAndPlay(beat, keepTrendHistory = 2) {
@@ -152,9 +199,11 @@ for (var i = 0; i < Object.keys(testData).length - 2; i++) {
 
 maxBeats = testData[Object.keys(testData)[0]].sharePrice.length;
 
+Tone.Transport.start();
+
 var mainLoop = new Tone.Clock(function() {
   for (var i = 0; i < companies.length; i++) {
-    companies[i].makeAndPlay(beat, KEEP_TREND_HISTORY);
+    companies[i].playSequence(beat);
 
     // console.log(
     //   companies[i].companyName,
@@ -165,9 +214,13 @@ var mainLoop = new Tone.Clock(function() {
   beat++;
 
   if (beat >= maxBeats) {
+    for (var i = 0; i < companies.length; i++) {
+      companies[i].sequence.stop();
+    }
+
     mainLoop.stop();
   } 
-}, 4);
+}, 1);
 
 mainLoop.start();
 
