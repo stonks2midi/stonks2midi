@@ -24,6 +24,31 @@ const SCALES = {
   minor: [36, 38, 39, 41, 43, 44, 46, 48, 50, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67, 68, 70, 72, 74, 75, 77, 79, 80, 82]
 };
 
+const SEQUENCES = [
+  ["current"],
+  ["current", "current"],
+  ["previous", null],
+  ["current", "nextNext"],
+  ["current", "current", "current", "current"],
+  ["current", "current", "previousPrevious", "current"],
+  ["current", "current", null, "current"],
+  [null, "current", null, "current"],
+  ["current", null, "current", null],
+  ["next", null, "current", null],
+  ["current", "next", "current", "next"],
+  ["current", "next", "previousPrevious", "current"],
+  ["nextNext", "current", "current", "previousPrevious"],
+  ["current", ["next", null, "nextNext", "next"], "current", null],
+  ["current", "next", "current", "previous", "current", "next", "current", "next"],
+  ["current", ["next", null, "next", "current"], "current", ["current", "next"], "current"],
+  [["current", null, "next", "current"], "current", "next", "current", ["current", "previous"]],
+  [["next", "current", null, "current"],["current", null, null, "nextNext"], "current", "next"],
+  ["current", [null, "previousPrevious", null, "previous"], "current", [null, "current"], "current"],
+  [["current", "next", null, "current"], [null, "current"], ["current", null, "current", null], "next", "current"],
+  [["current", "next", null, "next"], ["next", "current", null, "current"], ["next", "next", null, "current"], "current"],
+  [["nextNext", "next", "current", "next"], ["current", null, "current", null], ["previous", "current", "previous", "current"], null, ["nextNext", "current"]],
+];
+
 const KEEP_TREND_HISTORY = 2;
 
 function decimalToDecibels(decimal) {
@@ -186,6 +211,13 @@ class Company {
   makeAndPlay(beat, keepTrendHistory = 2) {
     this.makeNoteValues(beat, keepTrendHistory);
     this.playNote();
+  }
+
+  getActivityAmount(index, amount) {
+    var start = this.getPreviousNotes(index, amount)[0][0];
+    var end = testData[this.companyName].sharePrice[index];
+
+    return Math.abs(end - start);
   }
 }
 
