@@ -75,8 +75,8 @@ class Company {
   getNextNotes(index, amount) {
     var nextNotes = [];
 
-    for (var i = 0; i < amount; i++) {
-      if (index + i + 1 > testData[this.companyName].sharePrice.length) {
+    for (var i = 1; i <= amount; i++) {
+      if (index + i > testData[this.companyName].sharePrice.length) {
         nextNotes.push([0, -Infinity]);
       } else {
         nextNotes.push([testData[this.companyName].sharePrice[index + i], testData[this.companyName].volume[index + i]])
@@ -108,18 +108,18 @@ class Company {
     var change = this.getDirectionality(index, amount);
 
     if (change == 0) {
-      return "none"
+      return "none";
     } else if (change < 0) {
-      return "minor"
+      return "minor";
     } else if (change > 0) {
-      return "major"
+      return "major";
     }
   }
 
   getUniformTimeline(index) {
     var previousNotes = this.getPreviousNotes(index, 2);
     var nextNotes = this.getNextNotes(index, 2);
-    var currentNote = [testData[this.companyName].sharePrice[index - i], testData[this.companyName].volume[index - i]];
+    var currentNote = [testData[this.companyName].sharePrice[index], testData[this.companyName].volume[index]];
 
     return {
       previousPrevious: previousNotes[0],
@@ -134,6 +134,41 @@ class Company {
   playNote() {
     this.synth.volume.value = decimalToDecibels(this.currentValues[1]);
     this.synth.triggerAttackRelease(Tone.Frequency(this.currentValues[0], "midi").toNote(), "8n");
+  }
+
+  sequenceFactory(callback, timeline, sequence, time, index) {
+    var formattedSequenceBar = [];
+    var thisScope = this;
+
+    function iterateSequence(array) {
+      var newArray = [];
+      
+      for (var i = 0; i < array.length; i++) {
+        var data = array[i];
+
+        if (typeof(data) == "string") { // Reference to note
+          newArray.push(timeline[data][0]);
+        } else if (typeof(data) == "object") { // Subdivision
+          newArray.push(iterateSequence(data));
+        }
+      }
+
+      return newArray;
+    }
+
+    formattedSequenceBar = iterateSequence(sequence);
+
+    return new Tone.Sequence(callback, formattedSequenceBar, time);
+  }
+
+  playSequence(index, sequence = ["current", ["next", "next"], "current", "next"], time = "8n") {
+    var thisScope = this;
+
+    this.synth.volume.value = decimalToDecibels(this.currentValues[1]);
+
+    return this.sequenceFactory(function(time, note) {
+      thisScope.synth.triggerAttackRelease(Tone.Frequency(note, "midi").toNote(), "8n");
+    }, this.getUniformTimeline(index), sequence, time);
   }
 
   makeAndPlay(beat, keepTrendHistory = 2) {
