@@ -44,6 +44,11 @@ class Company {
     this.synth = new Tone.Synth().toMaster();
     this.currentValues = [];
     this.mode = "major";
+    this.sequence = null;
+  }
+
+  getNoteFromScale(index) {
+    return SCALES[this.mode][index];
   }
 
   makeNoteValues(index, keepTrendHistory = 2) {
@@ -138,7 +143,6 @@ class Company {
 
   sequenceFactory(callback, timeline, sequence, time, index) {
     var formattedSequenceBar = [];
-    var thisScope = this;
 
     function iterateSequence(array) {
       var newArray = [];
@@ -164,11 +168,19 @@ class Company {
   playSequence(index, sequence = ["current", ["next", "next"], "current", "next"], time = "8n") {
     var thisScope = this;
 
-    this.synth.volume.value = decimalToDecibels(this.currentValues[1]);
+    if (this.sequence != null) {
+      this.sequence.dispose();
+    }
 
-    return this.sequenceFactory(function(time, note) {
-      thisScope.synth.triggerAttackRelease(Tone.Frequency(note, "midi").toNote(), "8n");
+    this.synth.volume.value = testData[this.companyName].volume[index];
+
+    this.sequence = this.sequenceFactory(function(time, note) {
+      if (typeof(note) == "number") {
+        thisScope.synth.triggerAttackRelease(Tone.Frequency(thisScope.getNoteFromScale(note), "midi").toNote(), "8n");
+      }
     }, this.getUniformTimeline(index), sequence, time);
+
+    this.sequence.start();
   }
 
   makeAndPlay(beat, keepTrendHistory = 2) {
@@ -187,22 +199,28 @@ for (var i = 0; i < Object.keys(testData).length - 2; i++) {
 
 maxBeats = testData[Object.keys(testData)[0]].sharePrice.length;
 
+Tone.Transport.start();
+
 var mainLoop = new Tone.Clock(function() {
   for (var i = 0; i < companies.length; i++) {
-    companies[i].makeAndPlay(beat, KEEP_TREND_HISTORY);
+    companies[i].playSequence(beat);
 
-    // console.log(
-    //   companies[i].companyName,
-    //   companies[i].getUniformTimeline(beat)
-    // );
+    console.log(
+      companies[i].companyName,
+      companies[i].getUniformTimeline(beat)
+    );
   }
 
   beat++;
 
   if (beat >= maxBeats) {
+    for (var i = 0; i < companies.length; i++) {
+      companies[i].sequence.stop();
+    }
+
     mainLoop.stop();
   } 
-}, 4);
+}, 1);
 
 mainLoop.start();
 
