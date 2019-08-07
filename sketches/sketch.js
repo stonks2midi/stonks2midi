@@ -2002,6 +2002,7 @@ const SEQUENCES = [
 ];
 
 const KEEP_TREND_HISTORY = 2;
+const PATTERN_CHANGE_INTERVAL = 4;
 
 function decimalToDecibels(decimal) {
   var decibels = 0;
@@ -2134,7 +2135,7 @@ class Company {
 
         if (typeof (data) == "string") { // Reference to note
           newArray.push(timeline[data][0]);
-        } else if (typeof (data) == "object") { // Subdivision
+        } else if (typeof (data) == "object" && data != null) { // Subdivision
           newArray.push(iterateSequence(data));
         }
       }
@@ -2156,7 +2157,7 @@ class Company {
 
     this.synth.volume.value = testData[this.companyName].volume[index];
 
-    this.sequence = this.sequenceFactory(function (time, note) {
+    this.sequence = this.sequenceFactory(function (time, note) {      
       if (typeof (note) == "number") {
         thisScope.synth.triggerAttackRelease(Tone.Frequency(thisScope.getNoteFromScale(note), "midi").toNote(), "8n");
       }
@@ -2183,10 +2184,9 @@ async function start() {
 
   normalise(testData);
 
-  console.log(testData);
-
   var beat = 0;
   var maxBeats = 0;
+  var currentSequence = SEQUENCES[0];
 
   const companies = companyKeys.map(function (companyKey) {
     return new Company(companyKey);
@@ -2204,7 +2204,11 @@ async function start() {
 
   var mainLoop = new Tone.Clock(function () {
     for (var i = 0; i < companies.length; i++) {
-      companies[i].playSequence(beat);
+      companies[i].playSequence(beat, currentSequence);
+
+      if (beat % PATTERN_CHANGE_INTERVAL == 0) {
+        currentSequence = SEQUENCES[companies[i].getActivityAmount(beat, 2)];
+      }
     }
 
     beat++;
