@@ -10,6 +10,7 @@ npm run dev
 ```
 
 ## Inspirational quotes
+
 > I have now idea how the stock market works.
 >
 > _-James_

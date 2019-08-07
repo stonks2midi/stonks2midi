@@ -58,6 +58,99 @@ function mapRange(value, a, b, c, d) {
 
 // NOT FUNCTIONS
 
+var chorus = new Tone.Chorus({
+  frequency: 1.5,
+  delayTime: 3.5,
+  depth: 0.7,
+  type: "sine",
+  spread: 180
+})
+
+var filter = new Tone.Filter({
+  type: "lowpass",
+  frequency: 350,
+  rolloff: -12,
+  Q: 1,
+  gain: 0
+}).toMaster()
+
+
+var vibrato = new Tone.Vibrato({
+  maxDelay: 0.005,
+  frequency: 5,
+  depth: 0.1,
+  type: "sine"
+}).toMaster()
+
+var appleSynth = new Tone.Synth({
+  oscilator: {
+    type: "triangle"
+  },
+  enevlope: {
+    attack: 0.005,
+    decay: 0.1,
+    sustain: 0.0282,
+    release: 1
+
+  }
+}).connect(vibrato)
+
+var spoonsSynth = new Tone.FMSynth({
+  harmonicity: 3,
+  modulationIndex: 10,
+  detune: 0,
+  oscillator: {
+    type: "sine"
+  },
+  envelope: {
+    attack: 0.01,
+    decay: 0.001,
+    sustain: 0.1,
+    release: 0.5
+  },
+  modulation: {
+    type: "square"
+  },
+  modulationEnvelope: {
+    attack: 0.5,
+    decay: 0,
+    sustain: 1,
+    release: 0.5
+  }
+}).toMaster()
+
+var microsoftSynth = new Tone.PluckSynth({
+  attackNoise: 1,
+  dampening: 4000,
+  resonance: 0.7
+}).connect(filter)
+
+var googleSynth = new Tone.FMSynth({
+  frequency: 200,
+  envelope: {
+    attack: 0.001,
+    decay: 0.1577,
+    release: 0.2
+  },
+  harmonicity: 5.1,
+  modulationIndex: 32,
+  resonance: 4000,
+  octaves: 1.5
+}).connect(chorus)
+
+
+
+
+var synths = {
+  apple: appleSynth,
+  wetherspoons: spoonsSynth,
+  google: googleSynth,
+  microsoft: microsoftSynth
+}
+
+
+
+
 let testData = {
   google: {
     volume: [
@@ -1993,12 +2086,29 @@ const SEQUENCES = [
   ["current", ["next", null, "nextNext", "next"], "current", null],
   ["current", "next", "current", "previous", "current", "next", "current", "next"],
   ["current", ["next", null, "next", "current"], "current", ["current", "next"], "current"],
-  [["current", null, "next", "current"], "current", "next", "current", ["current", "previous"]],
-  [["next", "current", null, "current"], ["current", null, null, "nextNext"], "current", "next"],
+  [
+    ["current", null, "next", "current"], "current", "next", "current", ["current", "previous"]
+  ],
+  [
+    ["next", "current", null, "current"],
+    ["current", null, null, "nextNext"], "current", "next"
+  ],
   ["current", [null, "previousPrevious", null, "previous"], "current", [null, "current"], "current"],
-  [["current", "next", null, "current"], [null, "current"], ["current", null, "current", null], "next", "current"],
-  [["current", "next", null, "next"], ["next", "current", null, "current"], ["next", "next", null, "current"], "current"],
-  [["nextNext", "next", "current", "next"], ["current", null, "current", null], ["previous", "current", "previous", "current"], null, ["nextNext", "current"]],
+  [
+    ["current", "next", null, "current"],
+    [null, "current"],
+    ["current", null, "current", null], "next", "current"
+  ],
+  [
+    ["current", "next", null, "next"],
+    ["next", "current", null, "current"],
+    ["next", "next", null, "current"], "current"
+  ],
+  [
+    ["nextNext", "next", "current", "next"],
+    ["current", null, "current", null],
+    ["previous", "current", "previous", "current"], null, ["nextNext", "current"]
+  ],
 ];
 
 const KEEP_TREND_HISTORY = 2;
@@ -2019,7 +2129,7 @@ function decimalToDecibels(decimal) {
 class Company {
   constructor(name) {
     this.companyName = name;
-    this.synth = new Tone.Synth().toMaster();
+    this.synth = synths[name];
     this.currentValues = [];
     this.mode = "major";
     this.sequence = null;
@@ -2155,10 +2265,9 @@ class Company {
     if (this.sequence != null) {
       this.sequence.dispose();
     }
-
     this.synth.volume.value = testData[this.companyName].volume[index];
 
-    this.sequence = this.sequenceFactory(function (time, note) {      
+    this.sequence = this.sequenceFactory(function (time, note) {
       if (typeof (note) == "number") {
         thisScope.synth.triggerAttackRelease(Tone.Frequency(thisScope.getNoteFromScale(note), "midi").toNote(), noteLength);
       }
@@ -2199,7 +2308,7 @@ async function start() {
     comapnyHistoryLengths.push(testData[companies[i].companyName]["sharePrice"].length);
   }
 
-  maxBeats = Math.min(... comapnyHistoryLengths);
+  maxBeats = Math.min(...comapnyHistoryLengths);
 
   Tone.Transport.start();
 
