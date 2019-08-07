@@ -54,10 +54,6 @@ class Company {
   }
 }
 
-generatePattern() {
-  
-}
-
 var beat = 0;
 var companies = [];
 var maxBeats = 0;
