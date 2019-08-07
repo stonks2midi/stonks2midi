@@ -205,10 +205,10 @@ var mainLoop = new Tone.Clock(function() {
   for (var i = 0; i < companies.length; i++) {
     companies[i].playSequence(beat);
 
-    console.log(
-      companies[i].companyName,
-      companies[i].getUniformTimeline(beat)
-    );
+    // console.log(
+    //   companies[i].companyName,
+    //   companies[i].getUniformTimeline(beat)
+    // );
   }
 
   beat++;
