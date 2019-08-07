@@ -1,25 +1,37 @@
 const testData = {
   "companyA": {
     "sharePrice": [67, 70, 43, 56, 45, 40, 45, 25],
-    "volume": [6, 6, 5, 6, 7, 6, 6, 6]
+    "volume": [0.6, 0.6, 0.5, 0.6, 0.7, 0.6, 0.6, 0.6]
   },
   "companyB": {
     "sharePrice": [67, 56, 76, 34, 45, 76, 32, 25],
-    "volume": [6, 6, 5, 6, 6, 6, 5, 6]
+    "volume": [0.6, 0.6, 0.5, 0.6, 0.6, 0.6, 0.5, 0.6]
   },
   "companyC": {
     "sharePrice": [67, 70, 54, 56, 54, 40, 23, 25],
-    "volume": [6, 7, 5, 6, 6, 6, 6, 6]
+    "volume": [0.6, 0.7, 0.5, 0.6, 0.6, 0.6, 0.6, 0.6]
   },
   "companyD": {
     "sharePrice": [64, 34, 76, 34, 45, 40, 32, 65],
-    "volume": [6, 6, 6, 6, 7, 6, 6, 5]
+    "volume": [0.6, 0.6, 0.6, 0.6, 0.7, 0.6, 0.6, 0.5]
   },
   "ukInterestRate": [0.67, 0.70, 0.76, 0.56, 0.45, 0.40, 0.32, 0.25],
   "GBPtoUSD": [1.67, 1.70, 1.76, 1.56, 1.45, 1.40, 1.32, 1.25]
 }
 
 const dummyArray = [60, 0.8];
+
+function decimalToDecibels(decimal) {
+  var decibels = 0;
+
+  if (decimal != 0) {
+    decibels = 20 * Math.log10(decimal);
+  } else {
+    decibels = -Infinity;
+  }
+
+  return decibels;
+}
 
 class Company {
   constructor(name) {
@@ -109,7 +121,7 @@ class Company {
   }
 
   playNote() {
-    this.synth.volume.value = this.currentValues[1];
+    this.synth.volume.value = decimalToDecibels(this.currentValues[1]);
     this.synth.triggerAttackRelease(Tone.Frequency(this.currentValues[0], "midi").toNote(), "8n");
   }
 
