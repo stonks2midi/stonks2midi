@@ -1,25 +1,30 @@
 const testData = {
   "companyA": {
-    "sharePrice": [67, 70, 43, 56, 45, 40, 45, 25],
+    "sharePrice": [23, 15, 21, 18, 16, 21, 25, 23],
     "volume": [0.6, 0.6, 0.5, 0.6, 0.7, 0.6, 0.6, 0.6]
   },
   "companyB": {
-    "sharePrice": [67, 56, 76, 34, 45, 76, 32, 25],
+    "sharePrice": [17, 14, 10, 9, 11, 12, 15, 20],
     "volume": [0.6, 0.6, 0.5, 0.6, 0.6, 0.6, 0.5, 0.6]
   },
   "companyC": {
-    "sharePrice": [67, 70, 54, 56, 54, 40, 23, 25],
+    "sharePrice": [23, 22, 24, 25, 27, 26, 25, 22],
     "volume": [0.6, 0.7, 0.5, 0.6, 0.6, 0.6, 0.6, 0.6]
   },
   "companyD": {
-    "sharePrice": [64, 34, 76, 34, 45, 40, 32, 65],
+    "sharePrice": [21, 23, 18, 16, 15, 13, 11, 9],
     "volume": [0.6, 0.6, 0.6, 0.6, 0.7, 0.6, 0.6, 0.5]
   },
   "ukInterestRate": [0.67, 0.70, 0.76, 0.56, 0.45, 0.40, 0.32, 0.25],
   "GBPtoUSD": [1.67, 1.70, 1.76, 1.56, 1.45, 1.40, 1.32, 1.25]
 }
 
-const dummyArray = [60, 0.8];
+const SCALES = {
+  major: [36, 38, 40, 41, 43, 45, 47, 48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83],
+  minor: [36, 38, 39, 41, 43, 44, 46, 48, 50, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67, 68, 70, 72, 74, 75, 77, 79, 80, 82]
+};
+
+const KEEP_TREND_HISTORY = 2;
 
 function decimalToDecibels(decimal) {
   var decibels = 0;
@@ -38,13 +43,19 @@ class Company {
     this.companyName = name;
     this.synth = new Tone.Synth().toMaster();
     this.currentValues = [];
+    this.mode = "major";
   }
 
-  makeNoteValues(index) {
+  makeNoteValues(index, keepTrendHistory = 2) {
     var volume = testData[this.companyName].volume[index];
-    var sharePrice = testData[this.companyName].sharePrice[index];
+    var sharePrice = 0;
 
+    sharePrice = SCALES[this.mode][testData[this.companyName].sharePrice[index]];
     this.currentValues = [sharePrice, volume];
+
+    if (this.getMajorMinor(index, keepTrendHistory) != "none") {
+      this.mode = this.getMajorMinor(index, keepTrendHistory);
+    }
   }
 
   getPreviousNotes(index, amount) {
@@ -125,8 +136,8 @@ class Company {
     this.synth.triggerAttackRelease(Tone.Frequency(this.currentValues[0], "midi").toNote(), "8n");
   }
 
-  makeAndPlay(beat) {
-    this.makeNoteValues(beat);
+  makeAndPlay(beat, keepTrendHistory = 2) {
+    this.makeNoteValues(beat, keepTrendHistory);
     this.playNote();
   }
 }
@@ -143,7 +154,7 @@ maxBeats = testData[Object.keys(testData)[0]].sharePrice.length;
 
 var mainLoop = new Tone.Clock(function() {
   for (var i = 0; i < companies.length; i++) {
-    companies[i].makeAndPlay(beat);
+    companies[i].makeAndPlay(beat, KEEP_TREND_HISTORY);
 
     // console.log(
     //   companies[i].companyName,
