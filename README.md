@@ -14,6 +14,6 @@ npm run dev
 >
 > _-James_
 
-> It sound like actual music!
+> It sounds like actual music!
 >
 > _-Josh_
