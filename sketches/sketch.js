@@ -1948,12 +1948,12 @@ let testData = {
   ]
 };
 
-const normalise = function(data) {
+function normalise(data) {
   Object.keys(data)
-    .filter(function(companyName) {
+    .filter(function (companyName) {
       return companyKeys.includes(companyName);
     })
-    .forEach(function(companyName) {
+    .forEach(function (companyName) {
       let company = data[companyName];
 
       let minVolume = Math.min(...company.volume);
@@ -1962,11 +1962,11 @@ const normalise = function(data) {
       let minSharePrice = Math.min(...company.sharePrice);
       let maxSharePrice = Math.max(...company.sharePrice);
 
-      company.volume = company.volume.map(function(volume) {
+      company.volume = company.volume.map(function (volume) {
         return mapRange(volume, minVolume, maxVolume, 0, 1);
       });
-      company.sharePrice = company.sharePrice.map(function(sharePrice) {
-        return mapRange(sharePrice, minSharePrice, maxSharePrice, 0, 27);
+      company.sharePrice = company.sharePrice.map(function (sharePrice) {
+        return Math.round(mapRange(sharePrice, minSharePrice, maxSharePrice, 0, 27));
       });
     });
 };
@@ -1994,7 +1994,7 @@ const SEQUENCES = [
   ["current", "next", "current", "previous", "current", "next", "current", "next"],
   ["current", ["next", null, "next", "current"], "current", ["current", "next"], "current"],
   [["current", null, "next", "current"], "current", "next", "current", ["current", "previous"]],
-  [["next", "current", null, "current"],["current", null, null, "nextNext"], "current", "next"],
+  [["next", "current", null, "current"], ["current", null, null, "nextNext"], "current", "next"],
   ["current", [null, "previousPrevious", null, "previous"], "current", [null, "current"], "current"],
   [["current", "next", null, "current"], [null, "current"], ["current", null, "current", null], "next", "current"],
   [["current", "next", null, "next"], ["next", "current", null, "current"], ["next", "next", null, "current"], "current"],
@@ -2128,13 +2128,13 @@ class Company {
 
     function iterateSequence(array) {
       var newArray = [];
-      
+
       for (var i = 0; i < array.length; i++) {
         var data = array[i];
 
-        if (typeof(data) == "string") { // Reference to note
+        if (typeof (data) == "string") { // Reference to note
           newArray.push(timeline[data][0]);
-        } else if (typeof(data) == "object") { // Subdivision
+        } else if (typeof (data) == "object") { // Subdivision
           newArray.push(iterateSequence(data));
         }
       }
@@ -2156,8 +2156,8 @@ class Company {
 
     this.synth.volume.value = testData[this.companyName].volume[index];
 
-    this.sequence = this.sequenceFactory(function(time, note) {
-      if (typeof(note) == "number") {
+    this.sequence = this.sequenceFactory(function (time, note) {
+      if (typeof (note) == "number") {
         thisScope.synth.triggerAttackRelease(Tone.Frequency(thisScope.getNoteFromScale(note), "midi").toNote(), "8n");
       }
     }, this.getUniformTimeline(index), sequence, time);
@@ -2188,27 +2188,35 @@ async function start() {
   var beat = 0;
   var maxBeats = 0;
 
-  const companies = companyKeys.map(function(companyKey) {
+  const companies = companyKeys.map(function (companyKey) {
     return new Company(companyKey);
   });
-  
-Tone.Transport.start();
 
-  var mainLoop = new Tone.Clock(function() {
+  var comapnyHistoryLengths = [];
+
+  for (var i = 0; i < companies.length; i++) {
+    comapnyHistoryLengths.push(testData[companies[i].companyName]["sharePrice"].length);
+  }
+
+  maxBeats = Math.min(... comapnyHistoryLengths);
+
+  Tone.Transport.start();
+
+  var mainLoop = new Tone.Clock(function () {
     for (var i = 0; i < companies.length; i++) {
       companies[i].playSequence(beat);
     }
 
     beat++;
 
-  if (beat >= maxBeats) {
-    for (var i = 0; i < companies.length; i++) {
-      companies[i].sequence.stop();
-    }
+    if (beat >= maxBeats) {
+      for (var i = 0; i < companies.length; i++) {
+        companies[i].sequence.stop();
+      }
 
-    mainLoop.stop();
-  } 
-}, 1);
+      mainLoop.stop();
+    }
+  }, 1);
 
   mainLoop.start();
 }
