@@ -2258,8 +2258,9 @@ class Company {
     return new Tone.Sequence(callback, formattedSequenceBar, time);
   }
 
-  playSequence(index, sequence = ["current", ["next", "next"], "current", "next"], time = "8n") {
+  playSequence(index, sequence = ["current"]) {
     var thisScope = this;
+    var noteLength = sequence.length + "n";
 
     if (this.sequence != null) {
       this.sequence.dispose();
@@ -2268,9 +2269,9 @@ class Company {
 
     this.sequence = this.sequenceFactory(function (time, note) {
       if (typeof (note) == "number") {
-        thisScope.synth.triggerAttackRelease(Tone.Frequency(thisScope.getNoteFromScale(note), "midi").toNote(), "8n");
+        thisScope.synth.triggerAttackRelease(Tone.Frequency(thisScope.getNoteFromScale(note), "midi").toNote(), noteLength);
       }
-    }, this.getUniformTimeline(index), sequence, time);
+    }, this.getUniformTimeline(index), sequence, noteLength);
 
     this.sequence.start();
   }
@@ -2329,7 +2330,7 @@ async function start() {
 
       mainLoop.stop();
     }
-  }, 1);
+  }, 1 / 8);
 
   mainLoop.start();
 }
