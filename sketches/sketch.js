@@ -60,6 +60,13 @@ function mapRange(value, a, b, c, d) {
 
 // NOT FUNCTIONS
 
+var compressor = new Tone.Compressor({
+  ratio: 12,
+  threshold: -24,
+  release: 0.25,
+  attack: 0.003,
+  knee: 30
+}).toMaster()
 
 var chorus = new Tone.Chorus({
   frequency: 1.5,
@@ -67,7 +74,7 @@ var chorus = new Tone.Chorus({
   depth: 0.7,
   type: "sine",
   spread: 180
-})
+}).toMaster()
 
 var filter = new Tone.Filter({
   type: "lowpass",
@@ -98,7 +105,7 @@ var appleSynth = new Tone.Synth({
   }
 }).connect(vibrato)
 
-var spoonsSynth = new Tone.FMSynth({
+var fmSynth = new Tone.FMSynth({
   harmonicity: 3,
   modulationIndex: 10,
   detune: 0,
@@ -122,7 +129,7 @@ var spoonsSynth = new Tone.FMSynth({
   }
 }).toMaster()
 
-var microsoftSynth = new Tone.AMSynth({
+var amSynth = new Tone.AMSynth({
   harmonicity: 3,
   detune: 0,
   oscillator: {
@@ -143,9 +150,9 @@ var microsoftSynth = new Tone.AMSynth({
     sustain: 1,
     release: 0.5
   }
-})
+}).toMaster()
 
-var googleSynth = new Tone.FMSynth({
+var chorusSynth = new Tone.FMSynth({
   frequency: 200,
   envelope: {
     attack: 0.001,
@@ -157,6 +164,86 @@ var googleSynth = new Tone.FMSynth({
   resonance: 4000,
   octaves: 1.5
 }).connect(chorus)
+
+var sawSynth = new Tone.FMSynthI({
+  harmonicity: 3,
+  modulationIndex: 10,
+  detune: 0,
+  oscillator: {
+    type: "sawtooth"
+  },
+  envelope: {
+    attack: 0.01,
+    decay: 0.01,
+    sustain: 1,
+    release: 0.5
+  },
+  modulation: {
+    type: "square"
+  },
+  modulationEnvelope: {
+    attack: 0.5,
+    decay: 0,
+    sustain: 1,
+    release: 0.5
+  }
+}).toMaster()
+
+var compressedSynth = new Tone.Synth({
+  oscillator: {
+    type: "sawtooth"
+  },
+  envelope: {
+    attack: 0.001,
+    decay: 0.1,
+    sustain: 0.2009,
+    release: 1
+  }
+}).connect(compressor)
+
+var duoSynth = Tone.DuoSynth({
+  vibratoAmount: 0.5,
+  vibratoRate: 5,
+  harmonicity: 1.5,
+  voice0: {
+    volume: -10,
+    portamento: 0,
+    oscillator: {
+      type: sine
+    },
+    filterEnvelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    }
+  },
+  voice1: {
+    volume: -10,
+    portamento: 0,
+    oscillator: {
+      type: sine
+    },
+    filterEnvelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    }
+  }
+})
 
 var synths = {
   apple: appleSynth,
