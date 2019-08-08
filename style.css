@@ -9,6 +9,7 @@
 
 * {
     font-family: "Source Sans Pro";
+    outline: none;
 }
 
 html, body {
@@ -23,6 +24,16 @@ main {
     height: 100vh;
 }
 
+select {
+    width: calc(25% - 5px);
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
+
 #starterDialog {
     position: absolute;
     top: calc(50vh - 200px);
@@ -35,6 +46,7 @@ main {
     text-align: center;
     border-radius: 10px;
     transition: 0.5s;
+    overflow: auto;
 }
 
 #starterButton {
@@ -53,6 +65,23 @@ main {
     #starterDialog {
         left: 0;
         width: calc(100vw - 20px);
+    }
+}
+
+@media (max-width: 500px) {
+    select {
+        width: calc(100% - 20px);
+    }
+}
+
+@media (max-height: 500px) {
+    #starterButton {
+        top: unset;
+        left: unset;
+        bottom: 10px;
+        right: 10px;
+        width: 80px;
+        height: 30px;
     }
 }
 
