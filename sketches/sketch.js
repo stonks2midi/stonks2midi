@@ -2296,7 +2296,7 @@ class Company {
   }
 }
 
-async function start() {
+export async function start() {
   // testData = await getData();
 
   normalise(testData);
@@ -2345,5 +2345,3 @@ async function start() {
 
   mainLoop.start();
 }
-
-start();
