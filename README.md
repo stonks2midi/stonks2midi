@@ -9,6 +9,10 @@ npm install
 npm run dev
 ```
 
+## Suggested compositions
+A deep, emotional, but equally exciting piece: `kingfisher` `bp` `nokia` `microsoft`
+A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
+
 ## Inspirational quotes
 
 > I have now idea how the stock market works.
