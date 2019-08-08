@@ -61,7 +61,7 @@ function mapRange(value, a, b, c, d) {
 // NOT FUNCTIONS
 var distortion = new Tone.Distortion({
   distortion: 0.4,
-  oversample: none
+  oversample: "none"
 }).toMaster()
 
 
@@ -170,7 +170,7 @@ var chorusSynth = new Tone.FMSynth({
   octaves: 1.5
 }).connect(chorus)
 
-var sawSynth = new Tone.FMSynthI({
+var sawFmSynth = new Tone.FMSynth({
   harmonicity: 3,
   modulationIndex: 10,
   detune: 0,
@@ -206,7 +206,7 @@ var compressedSynth = new Tone.Synth({
   }
 }).connect(compressor)
 
-var duoSynth = Tone.DuoSynth({
+var duoSynth = new Tone.DuoSynth({
   vibratoAmount: 0.5,
   vibratoRate: 5,
   harmonicity: 1.5,
@@ -250,7 +250,7 @@ var duoSynth = Tone.DuoSynth({
   }
 }).toMaster()
 
-var distortSynth = Tone.DuoSynth({
+var distortSynth = new Tone.DuoSynth({
   vibratoAmount: 0.5,
   vibratoRate: 5,
   harmonicity: 1.5,
@@ -307,14 +307,14 @@ var chorusTremoloSynth = new Tone.Synth({
 }).connect(chorus)
 
 var monoSawtoothSynth = new Tone.MonoSynth({
-  frequency: C4,
+  frequency: "C4",
   detune: 0,
   oscillator: {
     type: "sawtooth"
   },
   filter: {
     Q: 6,
-    type: lowpass,
+    type: "lowpass",
     rolloff: -24
   },
   envelope: {
@@ -332,14 +332,14 @@ var monoSawtoothSynth = new Tone.MonoSynth({
     octaves: 7,
     exponent: 2
   }
-})
+}).toMaster()
 
 
 var synths = {
-  apple: appleSynth,
-  wetherspoons: spoonsSynth,
-  google: googleSynth,
-  microsoft: microsoftSynth
+  apple: chorusTremoloSynth,
+  wetherspoons: distortSynth,
+  google: duoSynth,
+  microsoft: triangleSynth
 }
 
 
