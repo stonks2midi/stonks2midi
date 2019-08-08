@@ -18,10 +18,15 @@ const BOTTOM_PADDING = 20;
 const INFO_COLOUR = [145, 183, 217];
 const READOUT_COLOUR = [255, 255, 255];
 
+const PROGRESS_BAR_BACKGROUND_COLOUR = [237, 237, 237];
+const PROGRESS_BAR_FOREGROUND_COLOUR = [107, 186, 255];
+
 var testDataDisplay = [];
 var data = [];
 var companyNames = [];
 var displaySharePrice = [];
+var progress = 0;
+var maxProgress = 1;
 
 var systemFont;
 
@@ -101,11 +106,19 @@ function draw() {
         fill(...INFO_COLOUR);
         noStroke();
         textSize(20);
-        text("Mean share price".toUpperCase(), 20, 30);
+        text("Mean share price".toUpperCase(), 20, 50);
 
         fill(...READOUT_COLOUR);
         textSize(50);
-        text("£" + parseFloat(Math.round(getMean(displaySharePrice) * 100) / 100).toFixed(2), 20, 80);
+        text("£" + parseFloat(Math.round(getMean(displaySharePrice) * 100) / 100).toFixed(2), 20, 100);
+
+        strokeWeight(10);
+
+    stroke(...PROGRESS_BAR_BACKGROUND_COLOUR);
+    line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) + 100, 20);
+
+    stroke(...PROGRESS_BAR_FOREGROUND_COLOUR);
+    line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) - 100 + ((progress / maxProgress) * 200), 20);
     }
 }
 
@@ -113,7 +126,7 @@ function windowResized() {
     resizeCanvas(window.innerWidth, window.innerHeight);
 }
 
-function updateGraph(height, legend, name, index) {
+function updateGraph(height, legend, name, index, maxIndex) {
     if (data[legend] == undefined) {
         data[legend] = new Array(HISTORY_LENGTH).fill(0);
     }
@@ -130,4 +143,7 @@ function updateGraph(height, legend, name, index) {
     data[legend].shift();
 
     displaySharePrice[legend] = testDataDisplay[name]["sharePrice"][index];
+
+    progress = index;
+    maxProgress = maxIndex;
 }
