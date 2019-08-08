@@ -81,7 +81,6 @@ function draw() {
     textSize(16);
     noStroke();
 
-
     for (var l = 0; l < data.length; l++) {
         var label = companyNames[l] + ": £" + parseFloat(Math.round(displaySharePrice[l] * 100) / 100).toFixed(2);
 

@@ -47,7 +47,7 @@ import testData from "./companies.js";
 
 // VARIABLES
 
-const companyKeys = ["apple", "google", "microsoft", "wetherspoons"];
+const companyKeys = Object.keys(testData);
 
 // FUNCTIONS
 
@@ -342,7 +342,6 @@ var synths = {
   microsoft: triangleSynth
 }
 
-
 // Due to the way that memory is managed in JS, the code below makes sure that a new memory area is allocated to store an indirect copy of `testData`.
 testDataDisplay = JSON.parse(JSON.stringify(testData));
 
@@ -602,6 +601,8 @@ export async function start() {
   // testData = await getData();
 
   normalise(testData);
+
+  console.log(testData);
 
   var beat = 0;
   var maxBeats = 0;
