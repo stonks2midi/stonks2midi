@@ -616,7 +616,6 @@ export async function start() {
     var value = document.getElementById("company" + i).options[document.getElementById("company" + i).selectedIndex].value;
 
     if (value != "(None)") {
-      console.log(value);
       companies.push(new Company(value));
     }
   }
@@ -663,7 +662,7 @@ for (var i = 0; i < 4; i++) {
   var selector = document.getElementById("company" + i);
   var companies = Object.keys(testData);
 
-  for (var c = 0; c < companies.length - 1; c++) {
+  for (var c = 0; c < companies.length; c++) {
       var option = document.createElement("option");
       
       option.value = companies[c];
