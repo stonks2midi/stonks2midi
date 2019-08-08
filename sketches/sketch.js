@@ -2303,7 +2303,6 @@ async function start() {
 
   var beat = 0;
   var maxBeats = 0;
-  var currentSequence = SEQUENCES[0];
 
   const companies = companyKeys.map(function (companyKey) {
     return new Company(companyKey);
@@ -2311,6 +2310,7 @@ async function start() {
 
   // const companies = [new Company("microsoft")];
 
+  var currentSequence = new Array(companies.length).fill(SEQUENCES[0]);
   var comapnyHistoryLengths = [];
 
   for (var i = 0; i < companies.length; i++) {
@@ -2325,10 +2325,10 @@ async function start() {
     for (var i = 0; i < companies.length; i++) {
       updateGraph(companies[i].getUniformTimeline(beat).current[0], i, companies[i].companyName, beat);
 
-      companies[i].playSequence(beat, currentSequence);
+      companies[i].playSequence(beat, currentSequence[i]);
 
       if (beat % PATTERN_CHANGE_INTERVAL == 0) {
-        currentSequence = SEQUENCES[Math.min(companies[i].getActivityAmount(beat, 2) + 5, SEQUENCES.length)];
+        currentSequence[i] = SEQUENCES[Math.min(companies[i].getActivityAmount(beat, 2) + 10, SEQUENCES.length)];
       }
     }
 
