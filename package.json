@@ -1,12 +1,12 @@
 {
-  "name": "untangled-template",
-  "version": "1.0.0",
-  "description": "p5 example project for untangled",
+  "name": "stonks2midi",
+  "version": "0.1.0",
+  "description": "Convert those stonks to midi!",
   "main": "index.js",
   "scripts": {
     "dev": "browser-sync start --server -f -w"
   },
-  "author": "neontribe",
+  "author": "stonks2midi",
   "license": "ISC",
   "dependencies": {
     "browser-sync": "^2.26.5",
