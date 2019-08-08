@@ -59,15 +59,27 @@ function mapRange(value, a, b, c, d) {
 }
 
 // NOT FUNCTIONS
+var distortion = new Tone.Distortion({
+  distortion: 0.4,
+  oversample: "none"
+}).toMaster()
 
+
+var compressor = new Tone.Compressor({
+  ratio: 12,
+  threshold: -24,
+  release: 0.25,
+  attack: 0.003,
+  knee: 30
+}).toMaster()
 
 var chorus = new Tone.Chorus({
   frequency: 1.5,
   delayTime: 3.5,
   depth: 0.7,
-  type: "sine",
+  type: "square",
   spread: 180
-})
+}).toMaster()
 
 var filter = new Tone.Filter({
   type: "lowpass",
@@ -85,7 +97,7 @@ var vibrato = new Tone.Vibrato({
   type: "sine"
 }).toMaster()
 
-var appleSynth = new Tone.Synth({
+var triangleSynth = new Tone.Synth({
   oscilator: {
     type: "triangle"
   },
@@ -98,7 +110,7 @@ var appleSynth = new Tone.Synth({
   }
 }).connect(vibrato)
 
-var spoonsSynth = new Tone.FMSynth({
+var fmSynth = new Tone.FMSynth({
   harmonicity: 3,
   modulationIndex: 10,
   detune: 0,
@@ -122,13 +134,30 @@ var spoonsSynth = new Tone.FMSynth({
   }
 }).toMaster()
 
-var microsoftSynth = new Tone.PluckSynth({
-  attackNoise: 1,
-  dampening: 4000,
-  resonance: 0.7
-}).connect(filter)
+var amSynth = new Tone.AMSynth({
+  harmonicity: 3,
+  detune: 0,
+  oscillator: {
+    type: "square"
+  },
+  envelope: {
+    attack: 0.01,
+    decay: 0.01,
+    sustain: 1,
+    release: 0.5
+  },
+  modulation: {
+    type: "square"
+  },
+  modulationEnvelope: {
+    attack: 0.5,
+    decay: 0,
+    sustain: 1,
+    release: 0.5
+  }
+}).toMaster()
 
-var googleSynth = new Tone.FMSynth({
+var chorusSynth = new Tone.FMSynth({
   frequency: 200,
   envelope: {
     attack: 0.001,
@@ -141,11 +170,176 @@ var googleSynth = new Tone.FMSynth({
   octaves: 1.5
 }).connect(chorus)
 
+var sawFmSynth = new Tone.FMSynth({
+  harmonicity: 3,
+  modulationIndex: 10,
+  detune: 0,
+  oscillator: {
+    type: "sawtooth"
+  },
+  envelope: {
+    attack: 0.01,
+    decay: 0.01,
+    sustain: 1,
+    release: 0.5
+  },
+  modulation: {
+    type: "square"
+  },
+  modulationEnvelope: {
+    attack: 0.5,
+    decay: 0,
+    sustain: 1,
+    release: 0.5
+  }
+}).toMaster()
+
+var compressedSynth = new Tone.Synth({
+  oscillator: {
+    type: "sawtooth"
+  },
+  envelope: {
+    attack: 0.001,
+    decay: 0.1,
+    sustain: 0.2009,
+    release: 1
+  }
+}).connect(compressor)
+
+var duoSynth = new Tone.DuoSynth({
+  vibratoAmount: 0.5,
+  vibratoRate: 5,
+  harmonicity: 1.5,
+  voice0: {
+    volume: -10,
+    portamento: 0,
+    oscillator: {
+      type: "pwm"
+    },
+    filterEnvelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    }
+  },
+  voice1: {
+    volume: -10,
+    portamento: 0,
+    oscillator: {
+      type: "sine"
+    },
+    filterEnvelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    }
+  }
+}).toMaster()
+
+var distortSynth = new Tone.DuoSynth({
+  vibratoAmount: 0.5,
+  vibratoRate: 5,
+  harmonicity: 1.5,
+  voice0: {
+    volume: -10,
+    portamento: 0,
+    oscillator: {
+      type: "pulse"
+    },
+    filterEnvelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    }
+  },
+  voice1: {
+    volume: -10,
+    portamento: 0,
+    oscillator: {
+      type: "sine"
+    },
+    filterEnvelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    }
+  }
+}).connect(distortion)
+
+var chorusTremoloSynth = new Tone.Synth({
+  oscillator: {
+    type: "square"
+  },
+  envelope: {
+    attack: 0.001,
+    decay: 0.1,
+    sustain: 0.3,
+    release: 1
+  }
+}).connect(chorus)
+
+var monoSawtoothSynth = new Tone.MonoSynth({
+  frequency: "C4",
+  detune: 0,
+  oscillator: {
+    type: "sawtooth"
+  },
+  filter: {
+    Q: 6,
+    type: "lowpass",
+    rolloff: -24
+  },
+  envelope: {
+    attack: 0.005,
+    decay: 0.1,
+    sustain: 0.9,
+    release: 1
+  },
+  filterEnvelope: {
+    attack: 0.06,
+    decay: 0.2,
+    sustain: 0.5,
+    release: 2,
+    baseFrequency: 200,
+    octaves: 7,
+    exponent: 2
+  }
+}).toMaster()
+
+
 var synths = {
-  apple: appleSynth,
-  wetherspoons: spoonsSynth,
-  google: googleSynth,
-  microsoft: microsoftSynth
+  apple: chorusTremoloSynth,
+  wetherspoons: distortSynth,
+  google: duoSynth,
+  microsoft: triangleSynth
 }
 
 
@@ -404,7 +598,7 @@ class Company {
   }
 }
 
-async function start() {
+export async function start() {
   // testData = await getData();
 
   normalise(testData);
@@ -412,9 +606,19 @@ async function start() {
   var beat = 0;
   var maxBeats = 0;
 
-  const companies = companyKeys.map(function (companyKey) {
-    return new Company(companyKey);
-  });
+  // const companies = companyKeys.map(function (companyKey) {
+  //   return new Company(companyKey);
+  // });
+
+  var companies = [];
+
+  for (var i = 0; i < 4; i++) {
+    var value = document.getElementById("company" + i).options[document.getElementById("company" + i).selectedIndex].value;
+
+    if (value != "(None)") {
+      companies.push(new Company(value));
+    }
+  }
 
   // const companies = [new Company("microsoft")];
 
@@ -454,4 +658,15 @@ async function start() {
   mainLoop.start();
 }
 
-start();
+for (var i = 0; i < 4; i++) {
+  var selector = document.getElementById("company" + i);
+  var companies = Object.keys(testData);
+
+  for (var c = 0; c < companies.length; c++) {
+      var option = document.createElement("option");
+      
+      option.value = companies[c];
+      option.innerHTML = companies[c];
+      selector.appendChild(option);
+  }
+}
