@@ -97,14 +97,16 @@ function draw() {
         text(label, (scaleX * (HISTORY_LENGTH - 1)) - textWidth(label) - 10, window.innerHeight - (scaleY * data[l][HISTORY_LENGTH - 1]) - BOTTOM_PADDING + 2, textWidth(label) + 10, 20)
     }
 
-    fill(...INFO_COLOUR);
-    noStroke();
-    textSize(20);
-    text("Mean share price".toUpperCase(), 20, 30);
+    if (displaySharePrice.length > 0) {
+        fill(...INFO_COLOUR);
+        noStroke();
+        textSize(20);
+        text("Mean share price".toUpperCase(), 20, 30);
 
-    fill(...READOUT_COLOUR);
-    textSize(50);
-    text("£" + parseFloat(Math.round(getMean(displaySharePrice) * 100) / 100).toFixed(2), 20, 80);
+        fill(...READOUT_COLOUR);
+        textSize(50);
+        text("£" + parseFloat(Math.round(getMean(displaySharePrice) * 100) / 100).toFixed(2), 20, 80);
+    }
 }
 
 function windowResized() {
