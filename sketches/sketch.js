@@ -2132,7 +2132,7 @@ function decimalToDecibels(decimal) {
 class Company {
   constructor(name) {
     this.companyName = name;
-    this.synth = synths[name];
+    // this.synth = synths[name];
     this.synth = new Tone.Synth().toMaster();
     this.currentValues = [];
     this.mode = "major";
