@@ -59,6 +59,11 @@ function mapRange(value, a, b, c, d) {
 }
 
 // NOT FUNCTIONS
+var distortion = new Tone.Distortion({
+  distortion: 0.4,
+  oversample: none
+}).toMaster()
+
 
 var compressor = new Tone.Compressor({
   ratio: 12,
@@ -243,7 +248,51 @@ var duoSynth = Tone.DuoSynth({
       release: 0.5
     }
   }
-})
+}).toMaster()
+
+var distortSynth = Tone.DuoSynth({
+  vibratoAmount: 0.5,
+  vibratoRate: 5,
+  harmonicity: 1.5,
+  voice0: {
+    volume: -10,
+    portamento: 0,
+    oscillator: {
+      type: "pulse"
+    },
+    filterEnvelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    }
+  },
+  voice1: {
+    volume: -10,
+    portamento: 0,
+    oscillator: {
+      type: "sine"
+    },
+    filterEnvelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    }
+  }
+}).connect(distortion)
 
 var chorusTremoloSynth = new Tone.Synth({
   oscillator: {
@@ -256,6 +305,35 @@ var chorusTremoloSynth = new Tone.Synth({
     release: 1
   }
 }).connect(chorus)
+
+var monoSawtoothSynth = new Tone.MonoSynth({
+  frequency: C4,
+  detune: 0,
+  oscillator: {
+    type: "sawtooth"
+  },
+  filter: {
+    Q: 6,
+    type: lowpass,
+    rolloff: -24
+  },
+  envelope: {
+    attack: 0.005,
+    decay: 0.1,
+    sustain: 0.9,
+    release: 1
+  },
+  filterEnvelope: {
+    attack: 0.06,
+    decay: 0.2,
+    sustain: 0.5,
+    release: 2,
+    baseFrequency: 200,
+    octaves: 7,
+    exponent: 2
+  }
+})
+
 
 var synths = {
   apple: appleSynth,
