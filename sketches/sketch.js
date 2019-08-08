@@ -2132,14 +2132,18 @@ function decimalToDecibels(decimal) {
 class Company {
   constructor(name) {
     this.companyName = name;
-    this.synth = synths[name];
+    // this.synth = synths[name];
+    this.synth = new Tone.Synth().toMaster();
     this.currentValues = [];
     this.mode = "major";
     this.sequence = null;
   }
 
-  getNoteFromScale(index) {
-    return SCALES[this.mode][index];
+  getNoteFromScale(note) {
+    // console.log(SCALES[this.mode][Math.min(Math.round(note * 2), 27)]);
+    // return SCALES[this.mode][Math.min(Math.round(note * 2), 27)];
+
+    return SCALES[this.mode][note];
   }
 
   makeNoteValues(index, keepTrendHistory = 2) {
@@ -2292,19 +2296,21 @@ class Company {
   }
 }
 
-async function start() {
+export async function start() {
   // testData = await getData();
 
   normalise(testData);
 
   var beat = 0;
   var maxBeats = 0;
-  var currentSequence = SEQUENCES[0];
 
   const companies = companyKeys.map(function (companyKey) {
     return new Company(companyKey);
   });
 
+  // const companies = [new Company("microsoft")];
+
+  var currentSequence = new Array(companies.length).fill(SEQUENCES[0]);
   var comapnyHistoryLengths = [];
 
   for (var i = 0; i < companies.length; i++) {
@@ -2319,10 +2325,10 @@ async function start() {
     for (var i = 0; i < companies.length; i++) {
       updateGraph(companies[i].getUniformTimeline(beat).current[0], i, companies[i].companyName, beat);
 
-      companies[i].playSequence(beat, currentSequence);
+      companies[i].playSequence(beat, currentSequence[i]);
 
       if (beat % PATTERN_CHANGE_INTERVAL == 0) {
-        currentSequence = SEQUENCES[companies[i].getActivityAmount(beat, 2)];
+        currentSequence[i] = SEQUENCES[Math.min(companies[i].getActivityAmount(beat, 2) + 10, SEQUENCES.length)];
       }
     }
 
@@ -2339,5 +2345,3 @@ async function start() {
 
   mainLoop.start();
 }
-
-start();
