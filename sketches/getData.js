@@ -2,7 +2,7 @@
 
 // Constants
 
-const API_KEY = "8KOBOUBTEF7RHR21";
+let API_KEY = "8KOBOUBTEF7RHR21";
 
 // FUNCTIONS
 
@@ -15,10 +15,10 @@ async function getExchangeRate(from, to) {
   const data = await response.json();
 
   const dataValuesArray = Object.entries(data["Time Series FX (Monthly)"])
-    .sort(function(a, b) {
+    .sort(function (a, b) {
       return new Date(a[0]) - new Date(b[0]);
     })
-    .map(function(item) {
+    .map(function (item) {
       return parseFloat(item[1]["4. close"]);
     });
 
@@ -48,15 +48,15 @@ async function getStonks(symbol) {
 
   let dates = Object.keys(monthlyData);
 
-  const sortedEntries = Object.entries(monthlyData).sort(function(a, b) {
+  const sortedEntries = Object.entries(monthlyData).sort(function (a, b) {
     return new Date(a[0]) - new Date(b[0]);
   });
 
-  const sharePriceArray = sortedEntries.map(function(item) {
+  const sharePriceArray = sortedEntries.map(function (item) {
     return parseFloat(item[1]["4. close"]);
   });
 
-  const volumeArray = sortedEntries.map(function(item) {
+  const volumeArray = sortedEntries.map(function (item) {
     return parseFloat(item[1]["5. volume"]);
   });
 
