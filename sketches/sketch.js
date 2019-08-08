@@ -335,12 +335,7 @@ var monoSawtoothSynth = new Tone.MonoSynth({
 }).toMaster()
 
 
-var synths = {
-  apple: chorusTremoloSynth,
-  wetherspoons: distortSynth,
-  google: duoSynth,
-  microsoft: triangleSynth
-}
+var synths = [chorusTremoloSynth, distortSynth, duoSynth, triangleSynth];
 
 // Due to the way that memory is managed in JS, the code below makes sure that a new memory area is allocated to store an indirect copy of `testData`.
 testDataDisplay = JSON.parse(JSON.stringify(testData));
@@ -431,10 +426,17 @@ function decimalToDecibels(decimal) {
 }
 
 class Company {
-  constructor(name) {
+  constructor(name, index) {
     this.companyName = name;
-    // this.synth = synths[name];
-    this.synth = new Tone.Synth().toMaster();
+
+    if (document.getElementById("useInstrumentals").checked) {
+      this.synth = synths[index];
+    } else {
+      this.synth = new Tone.Synth().toMaster();
+    }
+
+    console.log(document.getElementById("useInstrumentals").checked);
+
     this.currentValues = [];
     this.mode = "major";
     this.sequence = null;
@@ -602,8 +604,6 @@ export async function start() {
 
   normalise(testData);
 
-  console.log(testData);
-
   var beat = 0;
   var maxBeats = 0;
 
@@ -617,7 +617,7 @@ export async function start() {
     var value = document.getElementById("company" + i).options[document.getElementById("company" + i).selectedIndex].value;
 
     if (value != "(None)") {
-      companies.push(new Company(value));
+      companies.push(new Company(value, i));
     }
   }
 
@@ -634,7 +634,7 @@ export async function start() {
 
   Tone.Transport.start();
 
-  var mainLoop = new Tone.Clock(function () {
+  var mainLoop = new Tone.Clock(function() {
     for (var i = 0; i < companies.length; i++) {
       updateGraph(companies[i].getUniformTimeline(beat).current[0], i, companies[i].companyName, beat, maxBeats);
 

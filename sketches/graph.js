@@ -114,14 +114,16 @@ function draw() {
 
         var pushWidth = textWidth("£" + parseFloat(Math.round(getMean(displaySharePrice) * 100) / 100).toFixed(2));
 
-        fill(...INFO_COLOUR);
-        noStroke();
-        textSize(20);
-        text("Mean volume".toUpperCase(), Math.max(160, pushWidth) + 50, 50);
+        if (pushWidth + 75 + textWidth(String(Math.round(getMean(displayVolume)))) <= window.innerWidth) {
+            fill(...INFO_COLOUR);
+            noStroke();
+            textSize(20);
+            text("Mean volume".toUpperCase(), Math.max(160, pushWidth) + 50, 50);
 
-        fill(...READOUT_COLOUR);
-        textSize(50);
-        text(Math.round(getMean(displayVolume)), Math.max(160, pushWidth) + 50, 100);
+            fill(...READOUT_COLOUR);
+            textSize(50);
+            text(Math.round(getMean(displayVolume)), Math.max(160, pushWidth) + 50, 100);
+        }
 
         strokeWeight(10);
 
