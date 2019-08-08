@@ -62,6 +62,7 @@ select {
     background-color: #6bff8b;
     border: none;
     border-radius: 10px;
+    font-size: 20px;
     transition: 0.5s;
 }
 
