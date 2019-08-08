@@ -72,7 +72,7 @@ var chorus = new Tone.Chorus({
   frequency: 1.5,
   delayTime: 3.5,
   depth: 0.7,
-  type: "sine",
+  type: "square",
   spread: 180
 }).toMaster()
 
@@ -92,7 +92,7 @@ var vibrato = new Tone.Vibrato({
   type: "sine"
 }).toMaster()
 
-var appleSynth = new Tone.Synth({
+var triangleSynth = new Tone.Synth({
   oscilator: {
     type: "triangle"
   },
@@ -209,7 +209,7 @@ var duoSynth = Tone.DuoSynth({
     volume: -10,
     portamento: 0,
     oscillator: {
-      type: sine
+      type: "pwm"
     },
     filterEnvelope: {
       attack: 0.01,
@@ -228,7 +228,7 @@ var duoSynth = Tone.DuoSynth({
     volume: -10,
     portamento: 0,
     oscillator: {
-      type: sine
+      type: "sine"
     },
     filterEnvelope: {
       attack: 0.01,
@@ -244,6 +244,18 @@ var duoSynth = Tone.DuoSynth({
     }
   }
 })
+
+var chorusTremoloSynth = new Tone.Synth({
+  oscillator: {
+    type: "square"
+  },
+  envelope: {
+    attack: 0.001,
+    decay: 0.1,
+    sustain: 0.3,
+    release: 1
+  }
+}).connect(chorus)
 
 var synths = {
   apple: appleSynth,
