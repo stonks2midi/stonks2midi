@@ -2304,20 +2304,9 @@ export async function start() {
   var beat = 0;
   var maxBeats = 0;
 
-  // const companies = companyKeys.map(function (companyKey) {
-  //   return new Company(companyKey);
-  // });
-
-  var companies = [];
-
-  for (var i = 0; i < 4; i++) {
-    var value = document.getElementById("company" + i).options[document.getElementById("company" + i).selectedIndex].value;
-
-    if (value != "(None)") {
-      console.log(value);
-      companies.push(new Company(value));
-    }
-  }
+  const companies = companyKeys.map(function (companyKey) {
+    return new Company(companyKey);
+  });
 
   // const companies = [new Company("microsoft")];
 
@@ -2355,17 +2344,4 @@ export async function start() {
   }, 1 / 8);
 
   mainLoop.start();
-}
-
-for (var i = 0; i < 4; i++) {
-  var selector = document.getElementById("company" + i);
-  var companies = Object.keys(testData);
-
-  for (var c = 0; c < companies.length - 1; c++) {
-      var option = document.createElement("option");
-      
-      option.value = companies[c];
-      option.innerHTML = companies[c];
-      selector.appendChild(option);
-  }
 }
