@@ -2334,7 +2334,7 @@ export async function start() {
 
   var mainLoop = new Tone.Clock(function () {
     for (var i = 0; i < companies.length; i++) {
-      updateGraph(companies[i].getUniformTimeline(beat).current[0], i, companies[i].companyName, beat);
+      updateGraph(companies[i].getUniformTimeline(beat).current[0], i, companies[i].companyName, beat, maxBeats);
 
       companies[i].playSequence(beat, currentSequence[i]);
 
