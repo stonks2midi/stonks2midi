@@ -18,3 +18,7 @@ npm run dev
 > It sounds like actual music!
 >
 > _-Josh_
+
+> We can have have McDonalds playing the guitar
+>
+> _-Also Josh_
