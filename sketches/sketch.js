@@ -122,11 +122,28 @@ var spoonsSynth = new Tone.FMSynth({
   }
 }).toMaster()
 
-var microsoftSynth = new Tone.PluckSynth({
-  attackNoise: 1,
-  dampening: 4000,
-  resonance: 0.7
-}).connect(filter)
+var microsoftSynth = new Tone.AMSynth({
+  harmonicity: 3,
+  detune: 0,
+  oscillator: {
+    type: "square"
+  },
+  envelope: {
+    attack: 0.01,
+    decay: 0.01,
+    sustain: 1,
+    release: 0.5
+  },
+  modulation: {
+    type: "square"
+  },
+  modulationEnvelope: {
+    attack: 0.5,
+    decay: 0,
+    sustain: 1,
+    release: 0.5
+  }
+})
 
 var googleSynth = new Tone.FMSynth({
   frequency: 200,
