@@ -2,7 +2,7 @@
 
 // Constants
 
-let API_KEY = "8KOBOUBTEF7RHR21";
+var API_KEY = "8KOBOUBTEF7RHR21";
 
 // FUNCTIONS
 
@@ -40,8 +40,14 @@ async function getStonks(symbol) {
   const response = await fetch(requestURL);
   const data = await response.json();
 
+
+
   if (data.hasOwnProperty("Note")) {
     throw new Error("API limit reached");
+  }
+
+  if (data.hasOwnProperty("Error Message")) {
+    throw new Error(data["Error Message"]);
   }
 
   let monthlyData = data["Monthly Time Series"];
@@ -70,12 +76,12 @@ async function getStonks(symbol) {
 
 // call this with async / await
 async function getData() {
-  return {
-    google: await getStonks("GOOG"),
-    microsoft: await getStonks("MSFT"),
-    apple: await getStonks("AAPL"),
-    wetherspoons: await getStonks("JDW.LON"),
-    GBPtoUSD: await getExchangeRate("GBP", "USD")
+  let dataObject = {
+    intel: await getStonks("INTC")
     //GBPtoEUR: await getExchangeRate("GBP", "EUR")
   };
+  console.log(dataObject);
+  return dataObject;
 }
+
+getData();
