@@ -26,13 +26,14 @@ var data = [];
 var companyNames = [];
 var displaySharePrice = [];
 var displayVolume = [];
+var displayDate = [];
 var progress = 0;
 var maxProgress = 1;
 
 var systemFont;
 
 function getMean(array) {
-    return array.reduce(function(previous, current) {
+    return array.reduce(function (previous, current) {
         return previous + current;
     }, 0) / array.length;
 }
@@ -83,7 +84,7 @@ function draw() {
     noStroke();
 
     for (var l = 0; l < data.length; l++) {
-        var label = companyNames[l] + ": £" + parseFloat(Math.round(displaySharePrice[l] * 100) / 100).toFixed(2);
+        var label = companyNames[l] + ": £" + parseFloat(Math.round(displaySharePrice[l] * 100) / 100).toFixed(2) + " (" + displayDate[l] + ")";
 
         fill(
             Math.min(LEGEND_COLOURS[l][0] + 50, 255),
@@ -95,10 +96,10 @@ function draw() {
         ellipse(scaleX * (HISTORY_LENGTH - 1), window.innerHeight - (scaleY * data[l][HISTORY_LENGTH - 1]) - BOTTOM_PADDING, 15, 15);
 
         rectMode(CORNER);
-        fill(... TIP_BACKGROUND_COLOUR);
+        fill(...TIP_BACKGROUND_COLOUR);
         rect((scaleX * (HISTORY_LENGTH - 1)) - textWidth(label) - 15, window.innerHeight - (scaleY * data[l][HISTORY_LENGTH - 1]) - BOTTOM_PADDING + 2, textWidth(label) + 10, 20, 5);
 
-        fill(... TIP_TEXT_COLOUR);
+        fill(...TIP_TEXT_COLOUR);
         text(label, (scaleX * (HISTORY_LENGTH - 1)) - textWidth(label) - 10, window.innerHeight - (scaleY * data[l][HISTORY_LENGTH - 1]) - BOTTOM_PADDING + 2, textWidth(label) + 10, 20)
     }
 
@@ -159,6 +160,7 @@ function updateGraph(height, legend, name, index, maxIndex) {
 
     displaySharePrice[legend] = testDataDisplay[name]["sharePrice"][index];
     displayVolume[legend] = testDataDisplay[name]["volume"][index];
+    displayDate[legend] = testDataDisplay[name]["dates"][testDataDisplay[name]["dates"].length - 1 - index];
 
     progress = index;
     maxProgress = maxIndex;
