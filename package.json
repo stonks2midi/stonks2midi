@@ -1,0 +1,22 @@
+{
+  "name": "stonks2midi",
+  "version": "1.0.1",
+  "description": "Convert those stonks to midi!",
+  "main": "index.js",
+  "scripts": {
+    "dev": "browser-sync start --server -f -w",
+    "predeploy": "cpr . dist/ -do -f \"(.*\\.gitignore|.*node_modules.*)\" && cpr node_modules/tone/build/Tone.js dist/node_modules/tone/build/Tone.js -do && cpr node_modules/p5/lib/p5.min.js dist/node_modules/p5/lib/p5.min.js -do",
+    "deploy": "gh-pages --dist ./dist -t --remove ."
+  },
+  "author": "stonks2midi",
+  "license": "ISC",
+  "dependencies": {
+    "browser-sync": "^2.26.5",
+    "http-server": "^0.11.1",
+    "p5": "^0.8.0",
+    "tone": "^13.4.9",
+    "unmute": "^0.1.3",
+    "gh-pages": "^2.1.1",
+    "cpr": "^3.0.1"
+  }
+}
