@@ -26,7 +26,7 @@ A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
 >
 > _- Josh_
 
-> We can have have McDonalds playing the guitar.
+> We can have McDonalds playing the guitar.
 >
 > _- Also Josh_
 
