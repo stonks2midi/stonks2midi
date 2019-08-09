@@ -16,7 +16,7 @@ A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
 
 ## Inspirational quotes
 
-> I have now idea how the stock market works.
+> I have no idea how the stock market works.
 >
 > _-James_
 
@@ -27,3 +27,7 @@ A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
 > We can have have McDonalds playing the guitar
 >
 > _-Also Josh_
+
+> wetherspoons is immortal
+>
+> _- William_
