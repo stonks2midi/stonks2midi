@@ -124,15 +124,15 @@ function draw() {
             fill(...READOUT_COLOUR);
             textSize(50);
             text(Math.round(getMean(displayVolume)), Math.max(160, pushWidth) + 50, 100);
-
-            strokeWeight(10);
-
-            stroke(...PROGRESS_BAR_BACKGROUND_COLOUR);
-            line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) + 100, 20);
-
-            stroke(...PROGRESS_BAR_FOREGROUND_COLOUR);
-            line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) - 100 + ((progress / maxProgress) * 200), 20);
         }
+
+        strokeWeight(10);
+
+        stroke(...PROGRESS_BAR_BACKGROUND_COLOUR);
+        line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) + 100, 20);
+
+        stroke(...PROGRESS_BAR_FOREGROUND_COLOUR);
+        line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) - 100 + ((progress / maxProgress) * 200), 20);
     }
 }
 
