@@ -34,7 +34,7 @@ A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
 >
 > _- William_
 
-> We have lots of stonks.
+> We have lots of S T O N K S.
 >
 > _- Also William_
 
