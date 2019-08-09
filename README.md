@@ -16,14 +16,22 @@ A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
 
 ## Inspirational quotes
 
-> I have now idea how the stock market works.
+> I have no idea how the stock market works.
 >
-> _-James_
+> _- James_
 
 > It sounds like actual music!
 >
-> _-Josh_
+> _- Josh_
 
-> We can have have McDonalds playing the guitar
+> We can have have McDonalds playing the guitar.
 >
-> _-Also Josh_
+> _- Also Josh_
+
+> Wetherspoons is immortal.
+>
+> _- William_
+
+> We have lots of stonks.
+>
+> _- Also William_
