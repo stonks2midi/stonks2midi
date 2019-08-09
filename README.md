@@ -11,14 +11,6 @@ Go to [stonks2midi.github.io/stonks2midi](https://stonks2midi.github.io/stonks2m
 
 [![Preview screenshot of Stonks2Midi](preview.png)](https://stonks2midi.github.io/stonks2midi)
 
-## Installation
-Do the following:
-
-```
-npm install
-npm run dev
-```
-
 ## Suggested compositions
 A deep, emotional, but equally exciting piece: `kingfisher` `bp` `nokia` `microsoft`
 
