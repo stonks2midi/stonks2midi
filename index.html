@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Stonks2Midi</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-        <link rel="shortcut icon" href="media/Logo.png">
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <main>
-            <div id="graphCanvas"></div>
-        </main>
-        <div id="starterDialog">
-            <h1>Stonks2Midi</h1>
-            <p>Welcome to Stonks2Midi! Choose which companies you want to use, and listen to those soothing stonks!</p>
-            <h2>Select companies to listen to</h2>
-            <select id="company0"></select>
-            <select id="company1">
-                <option name="_none">(None)</option>
-            </select>
-            <select id="company2">
-                <option name="_none">(None)</option>
-            </select>
-            <select id="company3">
-                <option name="_none">(None)</option>
-            </select>
-        </div>
-        <button type="button" id="starterButton">Start</button>
-        <button type="button" id="restartButton">&#8635;</button>
-        <script src="node_modules/tone/build/Tone.js"></script>
-        <script src="node_modules/p5/lib/p5.min.js"></script>
-        <script src="sketches/getData.js"></script>
-        <script type="module" src="sketches/sketch.js"></script>
-        <script src="sketches/graph.js"></script>
-        <script type="module" src="script.js"></script>
-    </body>
+
+<head>
+    <title>Stonks2Midi</title>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <link rel="shortcut icon" href="media/Logo.png">
+    <link rel="stylesheet" href="sketches/style.css">
+</head>
+
+<body>
+    <main>
+        <div id="graphCanvas"></div>
+    </main>
+    <div id="starterDialog">
+        <h1>Stonks2Midi</h1>
+        <p>Welcome to Stonks2Midi! Choose which companies you want to use, and listen to those soothing stonks!</p>
+        <h2>Select companies to listen to</h2>
+        <select id="company0"></select>
+        <select id="company1">
+            <option name="_none">(None)</option>
+        </select>
+        <select id="company2">
+            <option name="_none">(None)</option>
+        </select>
+        <select id="company3">
+            <option name="_none">(None)</option>
+        </select>
+    </div>
+    <button type="button" id="starterButton">Start</button>
+    <button type="button" id="restartButton">&#8635;</button>
+    <script src="node_modules/tone/build/Tone.js"></script>
+    <script src="node_modules/p5/lib/p5.min.js"></script>
+    <script src="sketches/getData.js"></script>
+    <script type="module" src="sketches/sketch.js"></script>
+    <script src="sketches/graph.js"></script>
+    <script type="module" src="sketches/script.js"></script>
+</body>
+
 </html>
