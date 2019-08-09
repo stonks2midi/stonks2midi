@@ -1,6 +1,6 @@
 {
   "name": "stonks2midi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert those stonks to midi!",
   "main": "index.js",
   "scripts": {
