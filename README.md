@@ -9,7 +9,7 @@ You can choose which companies you want to listen to and assemble stock market-d
 ## Demo
 Go to [stonks2midi.github.io/stonks2midi](https://stonks2midi.github.io/stonks2midi)!
 
-[![preview.png](Preview screenshot of Stonks2Midi)](https://stonks2midi.github.io/stonks2midi)
+[![Preview screenshot of Stonks2Midi](preview.png)](https://stonks2midi.github.io/stonks2midi)
 
 ## Installation
 Do the following:
