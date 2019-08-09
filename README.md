@@ -35,3 +35,7 @@ A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
 > We have lots of stonks.
 >
 > _- Also William_
+
+> Stonks are great!
+>
+>_- Oliver_
