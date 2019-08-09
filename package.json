@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "browser-sync start --server -f -w",
-    "predeploy": "cpr . dist/ -do -f \"(.*\\.gitignore|.*node_modules.*)\" && cpr node_modules/tone/build/Tone.js dist/node_modules/tone/build/Tone.js -do && cpr node_modules/p5/lib/p5.min.js dist/node_modules/p5/lib/p5.min.js -do",
+    "predeploy": "cpr . dist/ -do -f \"(.*\\.gitignore|.*node_modules.*)\" && cpr node_modules/tone/build/Tone.js dist/node_modules/tone/build/Tone.js -do && cpr node_modules/p5/lib/p5.min.js dist/node_modules/p5/lib/p5.min.js -do && cpr node_modules/gh-pages dist/node_modules/gh-pages",
     "deploy": "gh-pages --dist ./dist -t --remove ."
   },
   "author": "stonks2midi",
