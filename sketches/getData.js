@@ -40,8 +40,6 @@ async function getStonks(symbol) {
   const response = await fetch(requestURL);
   const data = await response.json();
 
-
-
   if (data.hasOwnProperty("Note")) {
     throw new Error("API limit reached");
   }
@@ -67,6 +65,7 @@ async function getStonks(symbol) {
   });
 
   return {
+    dates: dates,
     volume: volumeArray,
     sharePrice: sharePriceArray,
     fromData: dates[dates.length - 1],
@@ -77,10 +76,8 @@ async function getStonks(symbol) {
 // call this with async / await
 async function getData() {
   let dataObject = {
-    intel: await getStonks("INTC")
-    //GBPtoEUR: await getExchangeRate("GBP", "EUR")
+    "Intel": await getStonks("INTC")
   };
-  console.log(dataObject);
   return dataObject;
 }
 

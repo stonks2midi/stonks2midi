@@ -602,8 +602,6 @@ export async function start() {
 
   normalise(testData);
 
-  console.log(testData);
-
   var beat = 0;
   var maxBeats = 0;
 
@@ -664,10 +662,10 @@ for (var i = 0; i < 4; i++) {
   var companies = Object.keys(testData);
 
   for (var c = 0; c < companies.length; c++) {
-      var option = document.createElement("option");
-      
-      option.value = companies[c];
-      option.innerHTML = companies[c];
-      selector.appendChild(option);
+    var option = document.createElement("option");
+
+    option.value = companies[c];
+    option.innerHTML = companies[c];
+    selector.appendChild(option);
   }
 }
