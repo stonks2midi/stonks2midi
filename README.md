@@ -24,14 +24,14 @@ A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
 >
 > _- Josh_
 
-> We can have have McDonalds playing the guitar
+> We can have have McDonalds playing the guitar.
 >
 > _- Also Josh_
 
-> wetherspoons is immortal
+> Wetherspoons is immortal.
 >
 > _- William_
 
-> we have lots of stonks
+> We have lots of stonks.
 >
 > _- Also William_
