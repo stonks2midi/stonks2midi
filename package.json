@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "browser-sync start --server -f -w",
-    "predeploy": "cpr . dist/ -do -f .gitignore",
-    "deploy": "gh-pages --dist dist/"
+    "deploy": "gh-pages --dist ."
   },
   "author": "stonks2midi",
   "license": "ISC",
@@ -16,7 +15,6 @@
     "p5": "^0.8.0",
     "tone": "^13.4.9",
     "unmute": "^0.1.3",
-    "gh-pages": "^2.1.1",
-    "cpr": "^3.0.1"
+    "gh-pages": "^2.1.1"
   }
 }
