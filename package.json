@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "browser-sync start --server -f -w",
-    "predeploy": "cpr sketches/ dist/sketches/ -do && cpr index.html dist/index.html",
+    "predeploy": "cpr . dist/ -do -f .gitignore",
     "deploy": "gh-pages --dist dist/"
   },
   "author": "stonks2midi",
