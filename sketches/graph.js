@@ -114,22 +114,24 @@ function draw() {
 
         var pushWidth = textWidth("£" + parseFloat(Math.round(getMean(displaySharePrice) * 100) / 100).toFixed(2));
 
-        fill(...INFO_COLOUR);
-        noStroke();
-        textSize(20);
-        text("Mean volume".toUpperCase(), Math.max(160, pushWidth) + 50, 50);
+        if (20 + Math.max(pushWidth) + 50 + textWidth(String(Math.round(getMean(displayVolume)))) < window.innerWidth) {
+            fill(...INFO_COLOUR);
+            noStroke();
+            textSize(20);
+            text("Mean volume".toUpperCase(), Math.max(160, pushWidth) + 50, 50);
 
-        fill(...READOUT_COLOUR);
-        textSize(50);
-        text(Math.round(getMean(displayVolume)), Math.max(160, pushWidth) + 50, 100);
+            fill(...READOUT_COLOUR);
+            textSize(50);
+            text(Math.round(getMean(displayVolume)), Math.max(160, pushWidth) + 50, 100);
 
-        strokeWeight(10);
+            strokeWeight(10);
 
-        stroke(...PROGRESS_BAR_BACKGROUND_COLOUR);
-        line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) + 100, 20);
+            stroke(...PROGRESS_BAR_BACKGROUND_COLOUR);
+            line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) + 100, 20);
 
-        stroke(...PROGRESS_BAR_FOREGROUND_COLOUR);
-        line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) - 100 + ((progress / maxProgress) * 200), 20);
+            stroke(...PROGRESS_BAR_FOREGROUND_COLOUR);
+            line((window.innerWidth / 2) - 100, 20, (window.innerWidth / 2) - 100 + ((progress / maxProgress) * 200), 20);
+        }
     }
 }
 
