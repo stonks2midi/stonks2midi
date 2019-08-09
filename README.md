@@ -4,7 +4,7 @@ Welcome to Stonks2Midi's main project! We hope you enjoy the music generated fro
 ## What is Stonks2Midi?
 **Good question!** Basically Stonks2Midi is a project aimed at converting historical stock market data into nicely-sounding (most of the time) tunes with cool rhythmic patterns ─ the higher the share price, the higher the musical note! We also provide a graph for those who are nerds/entrepreneurs.
 
-You can choose which companies you want to listen to and assemble stock market-driven musical bands! Different companies have different grooves, so you can mix and match the companies to make groovy tunes
+You can choose which companies you want to listen to and assemble stock market-driven musical bands! Different companies have different grooves, so you can mix and match the companies to make groovy tunes!
 
 ## Demo
 Go to [stonks2midi.github.io/stonks2midi](https://stonks2midi.github.io/stonks2midi)!
