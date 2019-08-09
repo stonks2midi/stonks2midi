@@ -18,16 +18,20 @@ A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
 
 > I have no idea how the stock market works.
 >
-> _-James_
+> _- James_
 
 > It sounds like actual music!
 >
-> _-Josh_
+> _- Josh_
 
 > We can have have McDonalds playing the guitar
 >
-> _-Also Josh_
+> _- Also Josh_
 
 > wetherspoons is immortal
 >
 > _- William_
+
+> we have lots of stonks
+>
+> _- Also William_
