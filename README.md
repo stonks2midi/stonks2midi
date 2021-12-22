@@ -24,11 +24,11 @@ A upbeat, retro and intense piece: `intel` `microsoft` `bac` `berkshire`
 
 > It sounds like actual music!
 >
-> _- Josh_
+> _- Leaf_
 
 > We can have McDonalds playing the guitar.
 >
-> _- Also Josh_
+> _- Also Leaf_
 
 > Wetherspoons is immortal.
 >
